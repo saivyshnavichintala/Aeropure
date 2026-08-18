@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AeroPure</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        ✈ AeroPure
+    </div>
+
+
+    <ul class="menu">
+
+
+        <li class="menu-item {% if request.endpoint == 'home' %}active{% endif %}">
+
+            <a href="{{ url_for('home') }}">
+
+                <span class="menu-icon">🏠</span>
+
+                <span>Home</span>
+
+            </a>
+
+        </li>
+
+
+        <li class="menu-item {% if request.endpoint == 'data_page' %}active{% endif %}">
+
+            <a href="{{ url_for('data_page') }}">
+
+                <span class="menu-icon">📊</span>
+
+                <span>Data</span>
+
+            </a>
+
+        </li>
+
+
+        <li class="menu-item {% if request.endpoint == 'eda_page' %}active{% endif %}">
+
+            <a href="{{ url_for('eda_page') }}">
+
+                <span class="menu-icon">📈</span>
+
+                <span>EDA</span>
+
+            </a>
+
+        </li>
+
+
+        <li class="menu-item {% if request.endpoint == 'preprocessing_page' %}active{% endif %}">
+
+            <a href="{{ url_for('preprocessing_page') }}">
+
+                <span class="menu-icon">⚙️</span>
+
+                <span>Preprocessing</span>
+
+            </a>
+
+        </li>
+
+
+        <li class="menu-item {% if request.endpoint == 'forecast_page' %}active{% endif %}">
+
+            <a href="{{ url_for('forecast_page') }}">
+
+                <span class="menu-icon">🔮</span>
+
+                <span>Forecast</span>
+
+            </a>
+
+        </li>
+
+
+    </ul>
+
+</aside>
+
+
+<!-- MAIN CONTENT -->
+
+<main class="main-content">
+
+    {% block content %}
+
+    {% endblock %}
+
+</main>
+
+
+<footer>
+
+    © 2026 AeroPure | Air Quality Forecasting System
+
+</footer>
+
+
+</body>
+
+</html>
