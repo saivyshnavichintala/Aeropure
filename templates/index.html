@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AeroPure - Air Quality Forecasting</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+    <!-- LOGO -->
+
+    <div class="logo">
+
+        ✈ AeroPure
+
+    </div>
+
+
+    <!-- MENU -->
+
+    <ul class="menu">
+
+
+        <!-- HOME -->
+
+        <li class="menu-item active">
+
+            <a href="{{ url_for('home') }}">
+
+                <span class="menu-icon">
+                    🏠
+                </span>
+
+                <span>
+                    Home
+                </span>
+
+            </a>
+
+        </li>
+
+
+        <!-- DATA -->
+
+        <li class="menu-item">
+
+            <a href="{{ url_for('data_page') }}">
+
+                <span class="menu-icon">
+                    📊
+                </span>
+
+                <span>
+                    Data
+                </span>
+
+            </a>
+
+        </li>
+
+
+        <!-- EDA -->
+
+        <li class="menu-item">
+
+            <a href="{{ url_for('eda_page') }}">
+
+                <span class="menu-icon">
+                    📈
+                </span>
+
+                <span>
+                    EDA
+                </span>
+
+            </a>
+
+        </li>
+
+
+        <!-- PREPROCESSING -->
+
+        <li class="menu-item">
+
+            <a href="{{ url_for('preprocessing_page') }}">
+
+                <span class="menu-icon">
+                    ⚙️
+                </span>
+
+                <span>
+                    Preprocessing
+                </span>
+
+            </a>
+
+        </li>
+
+
+        <!-- FORECASTING -->
+
+        <li class="menu-item">
+
+            <a href="#">
+
+                <span class="menu-icon">
+                    🤖
+                </span>
+
+                <span>
+                    Forecasting
+                </span>
+
+            </a>
+
+        </li>
+
+
+    </ul>
+
+</aside>
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<main class="main-content">
+
+
+    <!-- HEADER -->
+
+    <div class="top-header">
+
+        <div>
+
+            <h1>
+                AeroPure
+            </h1>
+
+            <p>
+                Air Quality Forecasting System
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- WELCOME CARD -->
+
+    <section class="welcome-card">
+
+        <div class="rocket-icon">
+
+            🌎
+
+        </div>
+
+
+        <h1>
+            Welcome to AeroPure
+        </h1>
+
+
+        <h2>
+            Air Quality Forecasting System
+        </h2>
+
+
+        <p>
+
+            Analyze air-quality and weather data
+            collected from multiple monitoring stations.
+
+        </p>
+
+    </section>
+
+
+    <!-- =================================================
+         DASHBOARD CARDS
+    ================================================= -->
+
+    <section class="dashboard-grid">
+
+
+        <!-- DATA CARD -->
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+                📊
+            </div>
+
+            <h2>
+                Dataset
+            </h2>
+
+            <p>
+
+                Explore the merged Beijing
+                multi-station air-quality dataset.
+
+            </p>
+
+
+            <a href="{{ url_for('data_page') }}"
+               class="card-button">
+
+                View Data
+
+            </a>
+
+        </div>
+
+
+        <!-- EDA CARD -->
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+                📈
+            </div>
+
+            <h2>
+                EDA
+            </h2>
+
+            <p>
+
+                Analyze distributions, correlations,
+                pollution trends and station patterns.
+
+            </p>
+
+
+            <a href="{{ url_for('eda_page') }}"
+               class="card-button">
+
+                View EDA
+
+            </a>
+
+        </div>
+
+
+        <!-- PREPROCESSING CARD -->
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+                ⚙️
+            </div>
+
+            <h2>
+                Preprocessing
+            </h2>
+
+            <p>
+
+                Handle missing values, detect outliers,
+                apply IQR clipping and Min-Max scaling.
+
+            </p>
+
+
+            <a href="{{ url_for('preprocessing_page') }}"
+               class="card-button">
+
+                Start Preprocessing
+
+            </a>
+
+        </div>
+
+
+        <!-- FORECASTING CARD -->
+
+        <div class="dashboard-card">
+
+            <div class="card-icon">
+                🤖
+            </div>
+
+            <h2>
+                Forecasting
+            </h2>
+
+            <p>
+
+                Use machine learning models to forecast
+                future PM2.5 air-quality levels.
+
+            </p>
+
+
+            <a href="#"
+               class="card-button">
+
+                Coming Soon
+
+            </a>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =================================================
+         PROJECT WORKFLOW
+    ================================================= -->
+
+    <section class="workflow-section">
+
+        <h2>
+            AeroPure Workflow
+        </h2>
+
+
+        <div class="workflow-grid">
+
+
+            <div class="workflow-card">
+
+                <span>
+                    01
+                </span>
+
+                <h3>
+                    Data Collection
+                </h3>
+
+                <p>
+
+                    Collect air-quality and weather
+                    information from multiple stations.
+
+                </p>
+
+            </div>
+
+
+            <div class="workflow-card">
+
+                <span>
+                    02
+                </span>
+
+                <h3>
+                    Preprocessing
+                </h3>
+
+                <p>
+
+                    Handle missing values, outliers
+                    and scale numerical features.
+
+                </p>
+
+            </div>
+
+
+            <div class="workflow-card">
+
+                <span>
+                    03
+                </span>
+
+                <h3>
+                    EDA
+                </h3>
+
+                <p>
+
+                    Analyze pollution trends,
+                    distributions and correlations.
+
+                </p>
+
+            </div>
+
+
+            <div class="workflow-card">
+
+                <span>
+                    04
+                </span>
+
+                <h3>
+                    ML Forecasting
+                </h3>
+
+                <p>
+
+                    Predict future air-quality
+                    and PM2.5 levels.
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+            © 2026 AeroPure | Air Quality Forecasting System
+        </p>
+
+    </footer>
+
+
+</main>
+
+
+</body>
+
+</html>

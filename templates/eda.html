@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Aerospace Data - EDA</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+        ✈ Aerospace
+    </div>
+
+
+    <ul class="menu">
+
+        <li class="menu-item">
+
+            <a href="{{ url_for('home') }}">
+
+                🏠
+
+                <span>
+                    Home
+                </span>
+
+            </a>
+
+        </li>
+
+
+        <li class="menu-item">
+
+            <a href="{{ url_for('data_page') }}">
+
+                📊
+
+                <span>
+                    Data
+                </span>
+
+            </a>
+
+        </li>
+
+
+        <li class="menu-item active">
+
+            <a href="{{ url_for('eda_page') }}">
+
+                📈
+
+                <span>
+                    EDA
+                </span>
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</aside>
+
+
+
+<!-- MAIN -->
+
+<main class="main-content">
+
+
+    <div class="page-header">
+
+        <h1>
+            📈 Exploratory Data Analysis
+        </h1>
+
+        <p>
+            Visual analysis of aerospace air-quality data
+        </p>
+
+    </div>
+
+
+    {% if error %}
+
+    <div class="error-box">
+
+        {{ error }}
+
+    </div>
+
+    {% endif %}
+
+
+    {% if result %}
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary-cards">
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                📋
+            </div>
+
+            <div>
+
+                <p>
+                    Rows
+                </p>
+
+                <h2>
+                    {{ result.rows }}
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                📊
+            </div>
+
+            <div>
+
+                <p>
+                    Columns
+                </p>
+
+                <h2>
+                    {{ result.columns }}
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-icon">
+                🔁
+            </div>
+
+            <div>
+
+                <p>
+                    Duplicates
+                </p>
+
+                <h2>
+                    {{ result.duplicates }}
+                </h2>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- GRAPHS -->
+
+    <div class="charts-grid">
+
+
+    {% for chart in result.charts %}
+
+        <div class="chart-card">
+
+            <img
+                src="{{ url_for('static',
+                         filename='charts/' + chart) }}"
+                alt="{{ chart }}"
+            >
+
+            <h3>
+                {{ chart.replace('_', ' ').replace('.png', '') }}
+            </h3>
+
+        </div>
+
+    {% endfor %}
+
+
+    </div>
+
+
+    {% endif %}
+
+
+</main>
+
+
+</body>
+
+</html>

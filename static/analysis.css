@@ -1,0 +1,321 @@
+```css
+/* =========================================
+   DATA PAGE
+========================================= */
+
+.data-page {
+    padding: 10px;
+}
+
+
+/* =========================================
+   DATA HEADER
+========================================= */
+
+.data-header {
+    background: white;
+
+    padding: 28px 32px;
+
+    border-radius: 18px;
+
+    margin-bottom: 25px;
+
+    border-left: 6px solid #7654c7;
+
+    box-shadow: 0 6px 20px rgba(80, 50, 130, 0.08);
+}
+
+.data-header h1 {
+    margin: 0;
+
+    color: #55349b;
+
+    font-size: 30px;
+}
+
+.data-header p {
+    margin-top: 8px;
+
+    color: #817a91;
+
+    font-size: 15px;
+}
+
+
+/* =========================================
+   DATA SUMMARY
+========================================= */
+
+.data-summary {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 22px;
+
+    margin-bottom: 25px;
+}
+
+
+.summary-card {
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 16px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 20px;
+
+    box-shadow: 0 6px 20px rgba(80, 50, 130, 0.08);
+
+    border: 1px solid #eee9f8;
+}
+
+
+.summary-icon {
+    width: 58px;
+
+    height: 58px;
+
+    border-radius: 14px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: #eee7ff;
+
+    font-size: 27px;
+}
+
+
+.summary-card h3 {
+    margin: 0 0 6px;
+
+    color: #777080;
+
+    font-size: 14px;
+
+    font-weight: 500;
+}
+
+
+.summary-card .number {
+    margin: 0;
+
+    color: #55349b;
+
+    font-size: 27px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================
+   DATA CONTAINER
+========================================= */
+
+.data-container {
+    background: white;
+
+    padding: 30px;
+
+    border-radius: 18px;
+
+    margin-bottom: 25px;
+
+    box-shadow: 0 6px 20px rgba(80, 50, 130, 0.08);
+}
+
+
+.data-container h2 {
+    margin: 0 0 20px;
+
+    color: #55349b;
+
+    font-size: 21px;
+}
+
+
+/* =========================================
+   TABLE CONTAINER
+========================================= */
+
+.data-table-container {
+    width: 100%;
+
+    overflow-x: auto;
+
+    border-radius: 12px;
+
+    border: 1px solid #e9e4f3;
+}
+
+
+/* =========================================
+   DATA TABLE
+========================================= */
+
+.data-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    min-width: 700px;
+}
+
+
+/* Header */
+
+.data-table thead th {
+    background: #7654c7;
+
+    color: white;
+
+    padding: 14px 16px;
+
+    text-align: left;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+}
+
+
+/* Body */
+
+.data-table tbody td {
+    padding: 13px 16px;
+
+    color: #514b5d;
+
+    font-size: 14px;
+
+    border-bottom: 1px solid #eeeaf5;
+
+    white-space: nowrap;
+}
+
+
+/* Alternate rows */
+
+.data-table tbody tr:nth-child(even) {
+    background: #faf8ff;
+}
+
+
+/* Hover */
+
+.data-table tbody tr:hover {
+    background: #f0ebff;
+}
+
+
+/* Last row */
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================================
+   MISSING VALUES
+========================================= */
+
+.missing-zero {
+    color: #2e8b57;
+
+    font-weight: 600;
+}
+
+
+.missing-value {
+    color: #d35400;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   DATA PREVIEW
+========================================= */
+
+.preview-title {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 18px;
+}
+
+
+.preview-title h2 {
+    margin: 0;
+}
+
+
+.preview-title span {
+    background: #eee7ff;
+
+    color: #6342b0;
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.data-error {
+    background: #fff1f1;
+
+    color: #c0392b;
+
+    padding: 16px 20px;
+
+    border-left: 5px solid #e74c3c;
+
+    border-radius: 10px;
+
+    margin-bottom: 25px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 800px) {
+
+    .data-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .data-container {
+        padding: 20px;
+    }
+
+    .data-header {
+        padding: 22px;
+    }
+
+}
+```
