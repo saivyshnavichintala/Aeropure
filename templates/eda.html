@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -9,69 +8,59 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Aerospace Data - EDA</title>
+    <title>AeroPure - EDA</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
+
 <body>
 
-
-<!-- SIDEBAR -->
 
 <aside class="sidebar">
 
     <div class="logo">
-        ✈ Aerospace
+        ✈ AeroPure
     </div>
-
 
     <ul class="menu">
 
         <li class="menu-item">
-
             <a href="{{ url_for('home') }}">
-
-                🏠
-
-                <span>
-                    Home
-                </span>
-
+                🏠 <span>Home</span>
             </a>
-
         </li>
-
 
         <li class="menu-item">
-
             <a href="{{ url_for('data_page') }}">
-
-                📊
-
-                <span>
-                    Data
-                </span>
-
+                📊 <span>Data</span>
             </a>
-
         </li>
 
-
         <li class="menu-item active">
-
             <a href="{{ url_for('eda_page') }}">
-
-                📈
-
-                <span>
-                    EDA
-                </span>
-
+                📈 <span>EDA</span>
             </a>
+        </li>
 
+        <li class="menu-item">
+            <a href="{{ url_for('preprocessing_page') }}">
+                ⚙️ <span>Preprocessing</span>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a href="{{ url_for('regression_page') }}">
+                📉 <span>Regression</span>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a href="{{ url_for('decision_tree_page') }}">
+                🌳 <span>Decision Tree</span>
+            </a>
         </li>
 
     </ul>
@@ -79,138 +68,108 @@
 </aside>
 
 
-
-<!-- MAIN -->
-
 <main class="main-content">
-
 
     <div class="page-header">
 
         <h1>
-            📈 Exploratory Data Analysis
+            Exploratory Data Analysis
         </h1>
 
         <p>
-            Visual analysis of aerospace air-quality data
+            Understand the structure and patterns
+            in the air-quality dataset.
         </p>
 
     </div>
 
 
-    {% if error %}
-
-    <div class="error-box">
-
-        {{ error }}
-
-    </div>
-
-    {% endif %}
+    <div class="info-row">
 
 
-    {% if result %}
-
-
-    <!-- SUMMARY -->
-
-    <div class="summary-cards">
-
-
-        <div class="summary-card">
-
-            <div class="summary-icon">
-                📋
-            </div>
-
-            <div>
-
-                <p>
-                    Rows
-                </p>
-
-                <h2>
-                    {{ result.rows }}
-                </h2>
-
-            </div>
-
-        </div>
-
-
-        <div class="summary-card">
-
-            <div class="summary-icon">
-                📊
-            </div>
-
-            <div>
-
-                <p>
-                    Columns
-                </p>
-
-                <h2>
-                    {{ result.columns }}
-                </h2>
-
-            </div>
-
-        </div>
-
-
-        <div class="summary-card">
-
-            <div class="summary-icon">
-                🔁
-            </div>
-
-            <div>
-
-                <p>
-                    Duplicates
-                </p>
-
-                <h2>
-                    {{ result.duplicates }}
-                </h2>
-
-            </div>
-
-        </div>
-
-
-    </div>
-
-
-    <!-- GRAPHS -->
-
-    <div class="charts-grid">
-
-
-    {% for chart in result.charts %}
-
-        <div class="chart-card">
-
-            <img
-                src="{{ url_for('static',
-                         filename='charts/' + chart) }}"
-                alt="{{ chart }}"
-            >
+        <div class="info-box">
 
             <h3>
-                {{ chart.replace('_', ' ').replace('.png', '') }}
+                Total Rows
             </h3>
+
+            <p>
+                {{ results.rows }}
+            </p>
 
         </div>
 
-    {% endfor %}
+
+        <div class="info-box">
+
+            <h3>
+                Total Columns
+            </h3>
+
+            <p>
+                {{ results.columns }}
+            </p>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <h3>
+                Missing Values
+            </h3>
+
+            <p>
+                {{ results.missing }}
+            </p>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <h3>
+                Duplicates
+            </h3>
+
+            <p>
+                {{ results.duplicates }}
+            </p>
+
+        </div>
 
 
     </div>
 
 
-    {% endif %}
+    <section class="content-section">
+
+        <h2>
+            Statistical Summary
+        </h2>
+
+        <div class="table-container">
+
+            {{ results.statistics | safe }}
+
+        </div>
+
+    </section>
+
+
+    <section class="content-section">
+
+        <h2>
+            Correlation Analysis
+        </h2>
+
+        <div class="table-container">
+
+            {{ results.correlation | safe }}
+
+        </div>
+
+    </section>
 
 
 </main>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AeroPure - Decision Tree</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<aside class="sidebar">
+
+    <div class="logo">
+        ✈ AeroPure
+    </div>
+
+    <ul class="menu">
+
+        <li class="menu-item">
+            <a href="{{ url_for('home') }}">
+                🏠 <span>Home</span>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a href="{{ url_for('data_page') }}">
+                📊 <span>Data</span>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a href="{{ url_for('eda_page') }}">
+                📈 <span>EDA</span>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a href="{{ url_for('preprocessing_page') }}">
+                ⚙️ <span>Preprocessing</span>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a href="{{ url_for('regression_page') }}">
+                📉 <span>Regression</span>
+            </a>
+        </li>
+
+        <li class="menu-item active">
+            <a href="{{ url_for('decision_tree_page') }}">
+                🌳 <span>Decision Tree</span>
+            </a>
+        </li>
+
+    </ul>
+
+</aside>
+
+
+<main class="main-content">
+
+
+    <div class="page-header">
+
+        <h1>
+            Decision Tree &amp; Pruning
+        </h1>
+
+        <p>
+            Comparison of Decision Tree performance
+            before and after pruning.
+        </p>
+
+    </div>
+
+
+    {% if results.error %}
+
+        <section class="content-section">
+
+            <h2>
+                Error
+            </h2>
+
+            <p>
+                {{ results.error }}
+            </p>
+
+        </section>
+
+    {% else %}
+
+
+        <div class="model-grid">
+
+
+            <!-- BEFORE PRUNING -->
+
+            <div class="model-card">
+
+                <div class="model-icon">
+                    🌳
+                </div>
+
+                <h2>
+                    Before Pruning
+                </h2>
+
+                <p>
+                    Full Decision Tree without
+                    depth restrictions.
+                </p>
+
+                <h3>
+                    R² Score
+                </h3>
+
+                <div class="score">
+                    {{ results.r2_before }}
+                </div>
+
+                <h3>
+                    Mean Squared Error
+                </h3>
+
+                <div class="score">
+                    {{ results.mse_before }}
+                </div>
+
+                <h3>
+                    Tree Depth
+                </h3>
+
+                <div class="score">
+                    {{ results.depth_before }}
+                </div>
+
+            </div>
+
+
+
+            <!-- AFTER PRUNING -->
+
+            <div class="model-card">
+
+                <div class="model-icon">
+                    ✂️
+                </div>
+
+                <h2>
+                    After Pruning
+                </h2>
+
+                <p>
+                    Decision Tree with depth and
+                    leaf-size restrictions.
+                </p>
+
+                <h3>
+                    R² Score
+                </h3>
+
+                <div class="score">
+                    {{ results.r2_after }}
+                </div>
+
+                <h3>
+                    Mean Squared Error
+                </h3>
+
+                <div class="score">
+                    {{ results.mse_after }}
+                </div>
+
+                <h3>
+                    Tree Depth
+                </h3>
+
+                <div class="score">
+                    {{ results.depth_after }}
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <section class="content-section">
+
+            <h2>
+                Pruning Analysis
+            </h2>
+
+            <p>
+                The Decision Tree is evaluated before and
+                after restricting its complexity. Pruning
+                helps reduce overfitting and can improve
+                generalization on unseen data.
+            </p>
+
+        </section>
+
+
+    {% endif %}
+
+
+</main>
+
+
+</body>
+
+</html>

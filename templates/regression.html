@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AeroPure - Regression</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+
+<body>
+
+
+<aside class="sidebar">
+
+    <div class="logo">
+        ✈ AeroPure
+    </div>
+
+    <ul class="menu">
+
+        <li class="menu-item">
+            <a href="{{ url_for('home') }}">
+                🏠 <span>Home</span>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a href="{{ url_for('data_page') }}">
+                📊 <span>Data</span>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a href="{{ url_for('eda_page') }}">
+                📈 <span>EDA</span>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a href="{{ url_for('preprocessing_page') }}">
+                ⚙️ <span>Preprocessing</span>
+            </a>
+        </li>
+
+        <li class="menu-item active">
+            <a href="{{ url_for('regression_page') }}">
+                📉 <span>Regression</span>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a href="{{ url_for('decision_tree_page') }}">
+                🌳 <span>Decision Tree</span>
+            </a>
+        </li>
+
+    </ul>
+
+</aside>
+
+
+<main class="main-content">
+
+
+    <div class="page-header">
+
+        <h1>
+            Regression Analysis
+        </h1>
+
+        <p>
+            Linear and Logistic Regression
+        </p>
+
+    </div>
+
+
+    {% if results.error %}
+
+        <section class="content-section">
+
+            <h2>
+                Error
+            </h2>
+
+            <p>
+                {{ results.error }}
+            </p>
+
+        </section>
+
+    {% else %}
+
+
+        <div class="model-grid">
+
+
+            <!-- LINEAR REGRESSION -->
+
+            <div class="model-card">
+
+                <div class="model-icon">
+                    📉
+                </div>
+
+                <h2>
+                    Linear Regression
+                </h2>
+
+                <p>
+                    Used for continuous PM2.5 prediction.
+                </p>
+
+                <h3>
+                    R² Score
+                </h3>
+
+                <div class="score">
+                    {{ results.linear_r2 }}
+                </div>
+
+                <h3>
+                    Mean Squared Error
+                </h3>
+
+                <div class="score">
+                    {{ results.linear_mse }}
+                </div>
+
+            </div>
+
+
+
+            <!-- LOGISTIC REGRESSION -->
+
+            <div class="model-card">
+
+                <div class="model-icon">
+                    🎯
+                </div>
+
+                <h2>
+                    Logistic Regression
+                </h2>
+
+                <p>
+                    Used for binary air-quality classification.
+                </p>
+
+                <h3>
+                    Accuracy
+                </h3>
+
+                <div class="score">
+                    {{ results.logistic_accuracy }}
+                </div>
+
+                <h3>
+                    Classification Threshold
+                </h3>
+
+                <div class="score">
+                    {{ results.threshold }}
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <section class="content-section">
+
+            <h2>
+                Features Used
+            </h2>
+
+            <p>
+                {{ results.features | join(', ') }}
+            </p>
+
+        </section>
+
+
+    {% endif %}
+
+
+</main>
+
+
+</body>
+
+</html>

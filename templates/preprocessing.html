@@ -19,111 +19,48 @@
 <body>
 
 
-<!-- =========================================================
-     SIDEBAR
-========================================================= -->
-
 <aside class="sidebar">
 
     <div class="logo">
         ✈ AeroPure
     </div>
 
-
     <ul class="menu">
 
-        <!-- HOME -->
-
         <li class="menu-item">
-
             <a href="{{ url_for('home') }}">
-
-                <span class="menu-icon">
-                    🏠
-                </span>
-
-                <span>
-                    Home
-                </span>
-
+                🏠 <span>Home</span>
             </a>
-
         </li>
 
-
-        <!-- DATA -->
-
         <li class="menu-item">
-
             <a href="{{ url_for('data_page') }}">
-
-                <span class="menu-icon">
-                    📊
-                </span>
-
-                <span>
-                    Data
-                </span>
-
+                📊 <span>Data</span>
             </a>
-
         </li>
-
-
-        <!-- EDA -->
 
         <li class="menu-item">
-
             <a href="{{ url_for('eda_page') }}">
-
-                <span class="menu-icon">
-                    📈
-                </span>
-
-                <span>
-                    EDA
-                </span>
-
+                📈 <span>EDA</span>
             </a>
-
         </li>
-
-
-        <!-- PREPROCESSING -->
 
         <li class="menu-item active">
-
             <a href="{{ url_for('preprocessing_page') }}">
-
-                <span class="menu-icon">
-                    ⚙️
-                </span>
-
-                <span>
-                    Preprocessing
-                </span>
-
+                ⚙️ <span>Preprocessing</span>
             </a>
-
         </li>
 
-
-        <!-- FORECASTING -->
+        <li class="menu-item">
+            <a href="{{ url_for('regression_page') }}">
+                📉 <span>Regression</span>
+            </a>
+        </li>
 
         <li class="menu-item">
-
-            <a href="#">
-
-                <span class="menu-icon">
-                    🤖
-                </span>
-
-                <span>
-                    Forecasting
-                </span>
-
+            <a href="{{ url_for('decision_tree_page') }}">
+                🌳 <span>Decision Tree</span>
             </a>
-
         </li>
 
     </ul>
@@ -131,864 +68,89 @@
 </aside>
 
 
-
-<!-- =========================================================
-     MAIN CONTENT
-========================================================= -->
-
 <main class="main-content">
 
 
-    <!-- =====================================================
-         TOP HEADER
-    ===================================================== -->
-
-    <div class="top-header">
+    <div class="page-header">
 
         <h1>
-            AeroPure Preprocessing
+            Data Preprocessing
         </h1>
 
         <p>
-            Data cleaning, outlier treatment and Min-Max
-            scaling for air-quality forecasting.
+            Clean and transform the dataset
+            for machine-learning analysis.
         </p>
 
     </div>
 
 
+    <div class="info-row">
 
-    <!-- =====================================================
-         ERROR
-    ===================================================== -->
 
-    {% if error %}
+        <div class="info-box">
 
-    <div class="error-box">
+            <h3>
+                Missing Before
+            </h3>
+
+            <p>
+                {{ results.missing_before }}
+            </p>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <h3>
+                Missing After
+            </h3>
+
+            <p>
+                {{ results.missing_after }}
+            </p>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <h3>
+                Outliers
+            </h3>
+
+            <p>
+                {{ results.outliers }}
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <section class="content-section">
 
         <h2>
-            ⚠ Preprocessing Error
+            Preprocessed Dataset
         </h2>
 
         <p>
-            {{ error }}
+            Numerical features are scaled using
+            Min-Max Scaling after IQR-based outlier handling.
         </p>
 
-    </div>
+        <div class="table-container">
 
-    {% endif %}
-
-
-
-    {% if result %}
-
-
-    <!-- =====================================================
-         DATASET OVERVIEW
-    ===================================================== -->
-
-    <section class="data-section">
-
-        <div class="section-title">
-
-            <div class="section-number">
-                01
-            </div>
-
-            <div>
-
-                <h2>
-                    Dataset Overview
-                </h2>
-
-                <p>
-                    Basic information about the dataset
-                    after loading.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="summary-cards">
-
-
-            <!-- ORIGINAL ROWS -->
-
-            <div class="summary-card">
-
-                <div class="summary-icon">
-                    📄
-                </div>
-
-                <div>
-
-                    <p>
-                        Original Rows
-                    </p>
-
-                    <h2>
-                        {{ result.original_rows }}
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <!-- ORIGINAL COLUMNS -->
-
-            <div class="summary-card">
-
-                <div class="summary-icon">
-                    📊
-                </div>
-
-                <div>
-
-                    <p>
-                        Original Columns
-                    </p>
-
-                    <h2>
-                        {{ result.original_columns }}
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <!-- TRAINING -->
-
-            <div class="summary-card">
-
-                <div class="summary-icon">
-                    🟢
-                </div>
-
-                <div>
-
-                    <p>
-                        Training Rows
-                    </p>
-
-                    <h2>
-                        {{ result.train_rows }}
-                    </h2>
-
-                </div>
-
-            </div>
-
-
-            <!-- TESTING -->
-
-            <div class="summary-card">
-
-                <div class="summary-icon">
-                    🔵
-                </div>
-
-                <div>
-
-                    <p>
-                        Testing Rows
-                    </p>
-
-                    <h2>
-                        {{ result.test_rows }}
-                    </h2>
-
-                </div>
-
-            </div>
-
+            {{ results.processed_data | safe }}
 
         </div>
 
     </section>
-
-
-
-    <!-- =====================================================
-         MISSING VALUES
-    ===================================================== -->
-
-    <section class="data-section">
-
-        <div class="section-title">
-
-            <div class="section-number">
-                02
-            </div>
-
-            <div>
-
-                <h2>
-                    Missing Value Treatment
-                </h2>
-
-                <p>
-                    Missing numerical values are replaced
-                    using the median value.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="table-wrapper">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            Feature
-                        </th>
-
-                        <th>
-                            Missing Before
-                        </th>
-
-                        <th>
-                            Missing After
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    {% for feature in result.features %}
-
-                    <tr>
-
-                        <td>
-                            <strong>
-                                {{ feature }}
-                            </strong>
-                        </td>
-
-                        <td>
-                            {{ result.missing_before[feature] }}
-                        </td>
-
-                        <td>
-
-                            {% if result.missing_after[feature] == 0 %}
-
-                            <span class="success-badge">
-                                0
-                            </span>
-
-                            {% else %}
-
-                            <span class="warning-badge">
-                                {{ result.missing_after[feature] }}
-                            </span>
-
-                            {% endif %}
-
-                        </td>
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =====================================================
-         OUTLIER DETECTION
-    ===================================================== -->
-
-    <section class="data-section">
-
-        <div class="section-title">
-
-            <div class="section-number">
-                03
-            </div>
-
-            <div>
-
-                <h2>
-                    Outlier Detection
-                </h2>
-
-                <p>
-                    Outliers are identified using the
-                    Interquartile Range (IQR) method.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <!-- TOTAL OUTLIERS -->
-
-        <div class="outlier-card">
-
-            <div class="outlier-icon">
-                ⚠
-            </div>
-
-            <div>
-
-                <p>
-                    Total Detected Outliers
-                </p>
-
-                <strong>
-                    {{ result.total_outliers }}
-                </strong>
-
-            </div>
-
-        </div>
-
-
-        <!-- OUTLIER TABLE -->
-
-        <div class="table-wrapper">
-
-            <table>
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            Feature
-                        </th>
-
-                        <th>
-                            Q1
-                        </th>
-
-                        <th>
-                            Q3
-                        </th>
-
-                        <th>
-                            IQR
-                        </th>
-
-                        <th>
-                            Lower Fence
-                        </th>
-
-                        <th>
-                            Upper Fence
-                        </th>
-
-                        <th>
-                            Outliers
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    {% for feature in result.features %}
-
-                    <tr>
-
-                        <td>
-                            <strong>
-                                {{ feature }}
-                            </strong>
-                        </td>
-
-                        <td>
-                            {{ result.outliers[feature].Q1 }}
-                        </td>
-
-                        <td>
-                            {{ result.outliers[feature].Q3 }}
-                        </td>
-
-                        <td>
-                            {{ result.outliers[feature].IQR }}
-                        </td>
-
-                        <td>
-                            {{ result.outliers[feature].lower_fence }}
-                        </td>
-
-                        <td>
-                            {{ result.outliers[feature].upper_fence }}
-                        </td>
-
-                        <td>
-
-                            <span class="outlier-badge">
-                                {{ result.outliers[feature].outliers }}
-                            </span>
-
-                        </td>
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =====================================================
-         MIN-MAX SCALING
-    ===================================================== -->
-
-    <section class="data-section scaling-section">
-
-        <div class="section-title">
-
-            <div class="section-number">
-                04
-            </div>
-
-            <div>
-
-                <h2>
-                    Min-Max Scaling
-                </h2>
-
-                <p>
-                    Numerical features are transformed
-                    into a range between 0 and 1.
-                </p>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- FORMULA -->
-
-        <div class="formula-box">
-
-            <h3>
-                Min-Max Scaling Formula
-            </h3>
-
-            <div class="formula">
-
-                X<sub>scaled</sub>
-                =
-                (X − X<sub>min</sub>)
-                /
-                (X<sub>max</sub> − X<sub>min</sub>)
-
-            </div>
-
-            <p>
-                The scaler is fitted only on the training
-                dataset and then applied to the testing dataset.
-            </p>
-
-        </div>
-
-
-
-        <!-- =================================================
-             BEFORE SCALING
-        ================================================= -->
-
-        <div class="sub-heading">
-
-            <h3>
-                Training Data Before Scaling
-            </h3>
-
-            <p>
-                Original numerical values before normalization.
-            </p>
-
-        </div>
-
-
-        <div class="table-wrapper">
-
-            <table class="scaling-table">
-
-                <thead>
-
-                    <tr>
-
-                        {% for feature in result.features %}
-
-                        <th>
-                            {{ feature }}
-                        </th>
-
-                        {% endfor %}
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    {% for row in result.scaling_before %}
-
-                    <tr>
-
-                        {% for feature in result.features %}
-
-                        <td>
-                            {{ row[feature] }}
-                        </td>
-
-                        {% endfor %}
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-
-
-        <!-- =================================================
-             AFTER SCALING
-        ================================================= -->
-
-        <div class="sub-heading">
-
-            <h3>
-                Training Data After Min-Max Scaling
-            </h3>
-
-            <p>
-                Values transformed into the 0–1 range.
-            </p>
-
-        </div>
-
-
-        <div class="table-wrapper">
-
-            <table class="scaling-table scaled-table">
-
-                <thead>
-
-                    <tr>
-
-                        {% for feature in result.features %}
-
-                        <th>
-                            {{ feature }}
-                        </th>
-
-                        {% endfor %}
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    {% for row in result.scaling_after %}
-
-                    <tr>
-
-                        {% for feature in result.features %}
-
-                        <td>
-                            {{ row[feature] }}
-                        </td>
-
-                        {% endfor %}
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-
-
-        <!-- =================================================
-             TESTING AFTER SCALING
-        ================================================= -->
-
-        <div class="sub-heading">
-
-            <h3>
-                Testing Data After Min-Max Scaling
-            </h3>
-
-            <p>
-                Testing values transformed using the
-                training-data scaler.
-            </p>
-
-        </div>
-
-
-        <div class="table-wrapper">
-
-            <table class="scaling-table scaled-table">
-
-                <thead>
-
-                    <tr>
-
-                        {% for feature in result.features %}
-
-                        <th>
-                            {{ feature }}
-                        </th>
-
-                        {% endfor %}
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    {% for row in result.testing_after %}
-
-                    <tr>
-
-                        {% for feature in result.features %}
-
-                        <td>
-                            {{ row[feature] }}
-                        </td>
-
-                        {% endfor %}
-
-                    </tr>
-
-                    {% endfor %}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-
-
-        <!-- =================================================
-             MINIMUM / MAXIMUM
-        ================================================= -->
-
-        <div class="sub-heading">
-
-            <h3>
-                Scaling Range Verification
-            </h3>
-
-            <p>
-                Training data minimum and maximum after
-                Min-Max scaling.
-            </p>
-
-        </div>
-
-
-        <div class="range-grid">
-
-            {% for feature in result.features %}
-
-            <div class="range-card">
-
-                <h4>
-                    {{ feature }}
-                </h4>
-
-
-                <div class="range-value">
-
-                    <span>
-                        Minimum
-                    </span>
-
-                    <strong>
-                        {{ result.scaled_minimum[feature] }}
-                    </strong>
-
-                </div>
-
-
-                <div class="range-value">
-
-                    <span>
-                        Maximum
-                    </span>
-
-                    <strong>
-                        {{ result.scaled_maximum[feature] }}
-                    </strong>
-
-                </div>
-
-
-                <div class="range-line">
-
-                    <span></span>
-
-                </div>
-
-            </div>
-
-            {% endfor %}
-
-        </div>
-
-    </section>
-
-
-
-    <!-- =====================================================
-         PROCESSED DATASET
-    ===================================================== -->
-
-    <section class="data-section">
-
-        <div class="section-title">
-
-            <div class="section-number">
-                05
-            </div>
-
-            <div>
-
-                <h2>
-                    Processed Dataset
-                </h2>
-
-                <p>
-                    Training and testing datasets generated
-                    after preprocessing.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="file-grid">
-
-
-            <!-- TRAINING -->
-
-            <div class="file-card">
-
-                <div class="file-icon">
-                    📄
-                </div>
-
-                <div class="file-info">
-
-                    <h3>
-                        Training Dataset
-                    </h3>
-
-                    <p>
-                        AeroPure_Train.csv
-                    </p>
-
-                </div>
-
-                <span class="file-status">
-                    ✓ Saved
-                </span>
-
-            </div>
-
-
-            <!-- TESTING -->
-
-            <div class="file-card">
-
-                <div class="file-icon">
-                    📄
-                </div>
-
-                <div class="file-info">
-
-                    <h3>
-                        Testing Dataset
-                    </h3>
-
-                    <p>
-                        AeroPure_Test.csv
-                    </p>
-
-                </div>
-
-                <span class="file-status">
-                    ✓ Saved
-                </span>
-
-            </div>
-
-
-        </div>
-
-    </section>
-
-
-    {% endif %}
 
 
 </main>
-
-
-
-<!-- =========================================================
-     FOOTER
-========================================================= -->
-
-<footer>
-
-    <p>
-        © 2026 AeroPure | Air Quality Forecasting System
-    </p>
-
-</footer>
 
 
 </body>
