@@ -2,122 +2,181 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>AeroPure</title>
+    <title>
+        {% block title %}AeroPure{% endblock %}
+    </title>
 
+    <!-- Main CSS -->
     <link rel="stylesheet"
           href="{{ url_for('static', filename='style.css') }}">
-
 </head>
-
 
 <body>
 
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+    <aside class="sidebar">
 
-<!-- SIDEBAR -->
-
-<aside class="sidebar">
-
-    <div class="logo">
-        ✈ AeroPure
-    </div>
-
-
-    <ul class="menu">
-
-
-        <li class="menu-item {% if request.endpoint == 'home' %}active{% endif %}">
-
-            <a href="{{ url_for('home') }}">
-
-                <span class="menu-icon">🏠</span>
-
-                <span>Home</span>
-
-            </a>
-
-        </li>
+        <!-- Logo -->
+        <div class="logo">
+            <span>✈</span>
+            <span>AeroPure</span>
+        </div>
 
 
-        <li class="menu-item {% if request.endpoint == 'data_page' %}active{% endif %}">
+        <!-- Navigation Menu -->
+        <ul class="menu">
 
-            <a href="{{ url_for('data_page') }}">
+            <!-- Home -->
+            <li class="menu-item
+                {% if request.endpoint == 'home' %}active{% endif %}">
 
-                <span class="menu-icon">📊</span>
+                <a href="{{ url_for('home') }}">
 
-                <span>Data</span>
+                    <span class="menu-icon">🏠</span>
 
-            </a>
+                    <span class="menu-text">
+                        Home
+                    </span>
 
-        </li>
+                </a>
 
-
-        <li class="menu-item {% if request.endpoint == 'eda_page' %}active{% endif %}">
-
-            <a href="{{ url_for('eda_page') }}">
-
-                <span class="menu-icon">📈</span>
-
-                <span>EDA</span>
-
-            </a>
-
-        </li>
+            </li>
 
 
-        <li class="menu-item {% if request.endpoint == 'preprocessing_page' %}active{% endif %}">
+            <!-- Data -->
+            <li class="menu-item
+                {% if request.endpoint == 'data_page' %}active{% endif %}">
 
-            <a href="{{ url_for('preprocessing_page') }}">
+                <a href="{{ url_for('data_page') }}">
 
-                <span class="menu-icon">⚙️</span>
+                    <span class="menu-icon">📊</span>
 
-                <span>Preprocessing</span>
+                    <span class="menu-text">
+                        Data
+                    </span>
 
-            </a>
+                </a>
 
-        </li>
-
-
-        <li class="menu-item {% if request.endpoint == 'forecast_page' %}active{% endif %}">
-
-            <a href="{{ url_for('forecast_page') }}">
-
-                <span class="menu-icon">🔮</span>
-
-                <span>Forecast</span>
-
-            </a>
-
-        </li>
+            </li>
 
 
-    </ul>
+            <!-- EDA -->
+            <li class="menu-item
+                {% if request.endpoint == 'eda_page' %}active{% endif %}">
 
-</aside>
+                <a href="{{ url_for('eda_page') }}">
+
+                    <span class="menu-icon">📈</span>
+
+                    <span class="menu-text">
+                        EDA
+                    </span>
+
+                </a>
+
+            </li>
 
 
-<!-- MAIN CONTENT -->
+            <!-- Preprocessing -->
+            <li class="menu-item
+                {% if request.endpoint == 'preprocessing_page' %}active{% endif %}">
 
-<main class="main-content">
+                <a href="{{ url_for('preprocessing_page') }}">
 
-    {% block content %}
+                    <span class="menu-icon">⚙️</span>
 
-    {% endblock %}
+                    <span class="menu-text">
+                        Preprocessing
+                    </span>
 
-</main>
+                </a>
+
+            </li>
 
 
-<footer>
+            <!-- Linear Regression -->
+            <li class="menu-item
+                {% if request.endpoint == 'linear_regression_page' %}active{% endif %}">
 
-    © 2026 AeroPure | Air Quality Forecasting System
+                <a href="{{ url_for('linear_regression_page') }}">
 
-</footer>
+                    <span class="menu-icon">📉</span>
 
+                    <span class="menu-text">
+                        Linear Regression
+                    </span>
+
+                </a>
+
+            </li>
+
+
+            <!-- Logistic Regression -->
+            <li class="menu-item
+                {% if request.endpoint == 'logistic_regression_page' %}active{% endif %}">
+
+                <a href="{{ url_for('logistic_regression_page') }}">
+
+                    <span class="menu-icon">🎯</span>
+
+                    <span class="menu-text">
+                        Logistic Regression
+                    </span>
+
+                </a>
+            <!-- decision_tree -->
+
+            </li>
+            <li class="menu-item
+    {% if request.endpoint == 'decision_tree_page' %}active{% endif %}">
+
+    <a href="{{ url_for('decision_tree_page') }}">
+
+        <span class="menu-icon">🌳</span>
+
+        <span class="menu-text">
+            Decision Tree
+        </span>
+
+    </a>
+
+</li>
+
+        </ul>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+    <main class="main-content">
+
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer>
+
+        <p>
+            © 2026 AeroPure |
+            Air Quality Analysis System
+        </p>
+
+    </footer>
 
 </body>
 

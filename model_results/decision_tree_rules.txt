@@ -1,0 +1,10 @@
+AEROPURE - DECISION TREE REGRESSION
+============================================================
+Criterion: squared_error
+Maximum Depth: 12
+Minimum Samples Split: 20
+Minimum Samples Leaf: 10
+Number of Leaves: 2622
+Number of Nodes: 5243
+
+The visualization contains the first four levels of the trained tree.

@@ -1,298 +1,218 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 
-<html lang="en">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>Aerospace Data - Data</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-
-</head>
-
-<body>
+{% block title %}
+AeroPure - Data
+{% endblock %}
 
 
-<!-- SIDEBAR -->
+{% block content %}
 
-<aside class="sidebar">
+<div class="page-header">
 
-    <div class="logo">
-        ✈ Aerospace
-    </div>
+    <h1>
+        Dataset
+    </h1>
 
+    <p>
+        Beijing Multi-Site Air Quality Dataset
+    </p>
 
-    <ul class="menu">
-
-        <li class="menu-item">
-
-            <a href="{{ url_for('home') }}">
-
-                🏠
-
-                <span>
-                    Home
-                </span>
-
-            </a>
-
-        </li>
+</div>
 
 
-        <li class="menu-item active">
+{% if error %}
 
-            <a href="{{ url_for('data_page') }}">
+<div class="error-card">
 
-                📊
+    <h3>
+        Error
+    </h3>
 
-                <span>
-                    Data
-                </span>
+    <p>
+        {{ error }}
+    </p>
 
-            </a>
+</div>
 
-        </li>
-
-
-        <li class="menu-item">
-
-            <a href="{{ url_for('eda_page') }}">
-
-                📈
-
-                <span>
-                    EDA
-                </span>
-
-            </a>
-
-        </li>
-
-    </ul>
-
-</aside>
+{% endif %}
 
 
-
-<!-- MAIN -->
-
-<main class="main-content">
+{% if summary %}
 
 
-    <div class="page-header">
+<div class="stats-container">
 
-        <h1>
-            📊 Aerospace Dataset
-        </h1>
+
+    <div class="stat-card">
+
+        <h3>
+            Total Rows
+        </h3>
 
         <p>
-            Dataset information and preview
+            {{ "{:,}".format(summary.n_rows) }}
         </p>
 
     </div>
 
 
-    {% if error %}
+    <div class="stat-card">
 
-    <div class="error-box">
-        {{ error }}
-    </div>
+        <h3>
+            Total Columns
+        </h3>
 
-    {% endif %}
-
-
-    {% if summary %}
-
-
-    <!-- SUMMARY -->
-
-    <div class="summary-cards">
-
-
-        <div class="summary-card">
-
-            <div class="summary-icon">
-                📋
-            </div>
-
-            <div>
-
-                <p>
-                    Total Rows
-                </p>
-
-                <h2>
-                    {{ summary.n_rows }}
-                </h2>
-
-            </div>
-
-        </div>
-
-
-        <div class="summary-card">
-
-            <div class="summary-icon">
-                📊
-            </div>
-
-            <div>
-
-                <p>
-                    Total Columns
-                </p>
-
-                <h2>
-                    {{ summary.n_cols }}
-                </h2>
-
-            </div>
-
-        </div>
-
+        <p>
+            {{ summary.n_cols }}
+        </p>
 
     </div>
 
 
-    <!-- COLUMNS -->
-
-    <div class="data-card">
-
-        <h2>
-            📑 Column Information
-        </h2>
+</div>
 
 
-        <div class="table-wrapper">
+<div class="content-card">
 
-            <table>
+    <h2>
+        Dataset Information
+    </h2>
 
-                <thead>
+    <p>
+        The dataset contains hourly air quality
+        observations collected from multiple monitoring
+        stations in Beijing.
+    </p>
 
-                    <tr>
-
-                        <th>
-                            Column
-                        </th>
-
-                        <th>
-                            Data Type
-                        </th>
-
-                        <th>
-                            Missing Values
-                        </th>
-
-                    </tr>
-
-                </thead>
+</div>
 
 
-                <tbody>
+<div class="content-card">
+
+    <h2>
+        Columns and Data Types
+    </h2>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Column
+                    </th>
+
+                    <th>
+                        Data Type
+                    </th>
+
+                    <th>
+                        Missing Values
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for col in summary.columns %}
+
+                <tr>
+
+                    <td>
+                        {{ col }}
+                    </td>
+
+                    <td>
+                        {{ summary.dtypes[col] }}
+                    </td>
+
+                    <td>
+                        {{ "{:,}".format(summary.missing_counts[col]) }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<div class="content-card">
+
+    <h2>
+        First 10 Records
+    </h2>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
 
                 {% for col in summary.columns %}
 
-                    <tr>
-
-                        <td>
-                            {{ col }}
-                        </td>
-
-                        <td>
-                            {{ summary.dtypes[col] }}
-                        </td>
-
-                        <td>
-
-                            {{ summary.missing_counts[col] }}
-
-                        </td>
-
-                    </tr>
+                    <th>
+                        {{ col }}
+                    </th>
 
                 {% endfor %}
 
-                </tbody>
+                </tr>
 
-            </table>
-
-        </div>
-
-    </div>
+            </thead>
 
 
-    <!-- PREVIEW -->
+            <tbody>
 
-    <div class="data-card">
+            {% for row in summary.preview %}
 
-        <h2>
-            👁 Dataset Preview
-        </h2>
+                <tr>
 
-        <p class="small-text">
-            First 10 rows
-        </p>
+                {% for col in summary.columns %}
 
+                    <td>
 
-        <div class="table-wrapper">
+                        {% if row[col] is none %}
 
-            <table>
+                            -
 
-                <thead>
+                        {% else %}
 
-                    <tr>
-
-                    {% for col in summary.columns %}
-
-                        <th>
-                            {{ col }}
-                        </th>
-
-                    {% endfor %}
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                {% for row in summary.preview %}
-
-                    <tr>
-
-                    {% for col in summary.columns %}
-
-                        <td>
                             {{ row[col] }}
-                        </td>
 
-                    {% endfor %}
+                        {% endif %}
 
-                    </tr>
+                    </td>
 
                 {% endfor %}
 
-                </tbody>
+                </tr>
 
-            </table>
+            {% endfor %}
 
-        </div>
+            </tbody>
+
+        </table>
 
     </div>
 
+</div>
 
-    {% endif %}
 
+{% endif %}
 
-</main>
-
-</body>
-
-</html>
+{% endblock %}

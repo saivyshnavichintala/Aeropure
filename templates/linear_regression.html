@@ -1,0 +1,2496 @@
+{% extends "base.html" %}
+
+{% block title %}
+AeroPure - Linear Regression
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   AEROPURE - LINEAR REGRESSION PROFESSIONAL STYLING
+   ========================================================= */
+
+/* ---------- GLOBAL ---------- */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f5f2fb;
+    color: #29233a;
+}
+
+
+/* =========================================================
+   MAIN CONTENT
+   ========================================================= */
+
+.main-content {
+    margin-left: 245px;
+    padding: 35px 48px 70px;
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at top right,
+            rgba(118, 84, 199, 0.08),
+            transparent 35%
+        ),
+        #f5f2fb;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.page-header {
+    position: relative;
+
+    margin-bottom: 32px;
+    padding: 30px 34px;
+
+    background: linear-gradient(
+        135deg,
+        #ffffff,
+        #f3edff
+    );
+
+    border: 1px solid #e3d8f4;
+    border-radius: 18px;
+
+    box-shadow:
+        0 8px 25px rgba(79, 55, 130, 0.08);
+
+    overflow: hidden;
+}
+
+.page-header::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 6px;
+
+    background: linear-gradient(
+        180deg,
+        #7654c7,
+        #59389c
+    );
+}
+
+.page-header h1 {
+    margin: 0 0 8px 4px;
+
+    color: #432782;
+
+    font-size: 30px;
+    font-weight: 750;
+
+    letter-spacing: -0.5px;
+}
+
+.page-header p {
+    margin: 0 0 0 4px;
+
+    color: #71697d;
+
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   ERROR BOX
+   ========================================================= */
+
+.error-box {
+    margin-bottom: 28px;
+    padding: 18px 22px;
+
+    background: #fff4f4;
+
+    border: 1px solid #efc4c4;
+    border-left: 5px solid #d9534f;
+
+    border-radius: 12px;
+
+    color: #963737;
+
+    box-shadow: 0 5px 15px rgba(150, 55, 55, 0.05);
+
+    font-size: 14px;
+}
+
+.error-box strong {
+    color: #a72f2f;
+    font-size: 15px;
+}
+
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.section {
+    margin-bottom: 38px;
+}
+
+
+/* =========================================================
+   SECTION TITLE
+   ========================================================= */
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    margin-bottom: 17px;
+}
+
+.section-title h2 {
+    margin: 0;
+
+    color: #432782;
+
+    font-size: 23px;
+    font-weight: 750;
+
+    letter-spacing: -0.2px;
+}
+
+
+/* =========================================================
+   STEP NUMBER
+   ========================================================= */
+
+.step-number {
+    width: 37px;
+    height: 37px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        #7654c7,
+        #59389c
+    );
+
+    color: white;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    box-shadow:
+        0 5px 13px rgba(89, 56, 156, 0.25);
+}
+
+
+/* =========================================================
+   SECTION DESCRIPTION
+   ========================================================= */
+
+.section-description {
+    margin: 5px 0 18px 49px;
+
+    color: #686075;
+
+    font-size: 14px;
+
+    line-height: 1.65;
+}
+
+.section-description strong {
+    color: #51318d;
+}
+
+
+/* =========================================================
+   CARD GRID
+   ========================================================= */
+
+.card-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+
+/* =========================================================
+   INFORMATION CARDS
+   ========================================================= */
+
+.info-card {
+    position: relative;
+
+    padding: 20px 22px;
+
+    min-height: 105px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5dcf3;
+    border-left: 5px solid #7654c7;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 5px 18px rgba(74, 50, 120, 0.07);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 25px rgba(74, 50, 120, 0.12);
+}
+
+.info-card .label {
+    margin-bottom: 7px;
+
+    color: #7151aa;
+
+    font-size: 12px;
+    font-weight: 750;
+
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+.info-card .value {
+    color: #29233a;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   MODEL SELECTOR
+   ========================================================= */
+
+.model-selector {
+    padding: 23px 25px;
+
+    background: #ffffff;
+
+    border: 1px solid #e3d9f1;
+    border-radius: 16px;
+
+    box-shadow:
+        0 6px 20px rgba(72, 48, 120, 0.07);
+}
+
+.model-selector label {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: #4c3e61;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.model-selector select {
+    width: 290px;
+
+    padding: 11px 14px;
+
+    border: 1px solid #cfc2e7;
+    border-radius: 9px;
+
+    background: #ffffff;
+    color: #30283f;
+
+    font-size: 14px;
+
+    outline: none;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.model-selector select:hover {
+    border-color: #a891d0;
+}
+
+.model-selector select:focus {
+    border-color: #7654c7;
+
+    box-shadow:
+        0 0 0 3px rgba(118, 84, 199, 0.12);
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+   ========================================================= */
+
+.submit-btn {
+    margin-top: 12px;
+
+    padding: 10px 19px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: linear-gradient(
+        135deg,
+        #7654c7,
+        #59389c
+    );
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 650;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 12px rgba(89, 56, 156, 0.22);
+
+    transition: all 0.2s ease;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 18px rgba(89, 56, 156, 0.28);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   NOTE
+   ========================================================= */
+
+.note {
+    margin-top: 14px;
+
+    padding: 14px 18px;
+
+    background: #faf8ff;
+
+    border: 1px solid #e5dcf3;
+    border-left: 4px solid #a58bd4;
+
+    border-radius: 9px;
+
+    color: #665d70;
+
+    font-size: 13px;
+
+    line-height: 1.65;
+}
+
+.note strong {
+    color: #543493;
+}
+
+
+/* =========================================================
+   TABLE CONTAINER
+   ========================================================= */
+
+.table-container {
+    width: 100%;
+
+    overflow-x: auto;
+
+    background: #ffffff;
+
+    border: 1px solid #e3daf1;
+    border-radius: 15px;
+
+    box-shadow:
+        0 6px 20px rgba(72, 48, 120, 0.06);
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 13px;
+}
+
+thead th {
+    padding: 14px 16px;
+
+    background: linear-gradient(
+        135deg,
+        #7654c7,
+        #59389c
+    );
+
+    color: #ffffff;
+
+    text-align: left;
+
+    font-weight: 650;
+
+    white-space: nowrap;
+}
+
+thead th:first-child {
+    border-top-left-radius: 13px;
+}
+
+thead th:last-child {
+    border-top-right-radius: 13px;
+}
+
+tbody td {
+    padding: 12px 16px;
+
+    border-bottom: 1px solid #eee9f6;
+
+    color: #443b50;
+
+    vertical-align: middle;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:nth-child(even) {
+    background: #faf9fd;
+}
+
+tbody tr:hover {
+    background: #f1ebff;
+
+    transition: 0.15s ease;
+}
+
+tbody td strong {
+    color: #4f328d;
+}
+
+
+/* =========================================================
+   FEATURE LIST
+   ========================================================= */
+
+.feature-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, minmax(0, 1fr));
+
+    gap: 10px;
+}
+
+.feature-item {
+    padding: 12px 15px;
+
+    background: #ffffff;
+
+    border: 1px solid #e4dbf2;
+
+    border-radius: 9px;
+
+    color: #50465d;
+
+    font-size: 13px;
+
+    box-shadow:
+        0 3px 10px rgba(72, 48, 120, 0.04);
+
+    transition: all 0.2s ease;
+}
+
+.feature-item:hover {
+    background: #f4efff;
+
+    border-color: #cdbde8;
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   METRIC GRID
+   ========================================================= */
+
+.metric-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 16px;
+}
+
+
+/* =========================================================
+   METRIC CARD
+   ========================================================= */
+
+.metric-card {
+    position: relative;
+
+    padding: 22px 18px;
+
+    background: #ffffff;
+
+    border: 1px solid #e3daf1;
+    border-radius: 15px;
+
+    text-align: center;
+
+    box-shadow:
+        0 5px 18px rgba(72, 48, 120, 0.07);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.metric-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 4px;
+
+    background: linear-gradient(
+        90deg,
+        #7654c7,
+        #59389c
+    );
+}
+
+.metric-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 24px rgba(72, 48, 120, 0.11);
+}
+
+.metric-name {
+    margin-bottom: 8px;
+
+    color: #746b82;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+.metric-value {
+    color: #57349b;
+
+    font-size: 25px;
+    font-weight: 750;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   CHART CARD
+   ========================================================= */
+
+.chart-card {
+    padding: 22px;
+
+    background: #ffffff;
+
+    border: 1px solid #e3daf1;
+    border-radius: 16px;
+
+    box-shadow:
+        0 6px 20px rgba(72, 48, 120, 0.07);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.chart-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(72, 48, 120, 0.11);
+}
+
+.chart-card img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    border-radius: 9px;
+}
+
+
+/* =========================================================
+   CHART GRID
+   ========================================================= */
+
+.chart-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 20px;
+}
+
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+
+.badge {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 5px 11px;
+
+    border-radius: 20px;
+
+    background: #eee8fb;
+
+    color: #59389c;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    white-space: nowrap;
+}
+
+.badge.selected {
+    background: #e5dcff;
+
+    color: #4d2991;
+
+    box-shadow:
+        0 2px 7px rgba(89, 56, 156, 0.12);
+}
+
+
+/* =========================================================
+   BEST MODEL
+   ========================================================= */
+
+.best-model {
+    padding: 27px 28px;
+
+    background: linear-gradient(
+        135deg,
+        #f0eaff,
+        #ffffff
+    );
+
+    border: 1px solid #d9c9f2;
+    border-left: 5px solid #7654c7;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 7px 22px rgba(72, 48, 120, 0.08);
+}
+
+.best-model-name {
+    margin-bottom: 20px;
+
+    color: #4f2d91;
+
+    font-size: 25px;
+    font-weight: 750;
+}
+
+.best-model .card-grid {
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+}
+
+.best-model .info-card {
+    min-height: 90px;
+}
+
+
+/* =========================================================
+   CONCLUSION
+   ========================================================= */
+
+.conclusion {
+    padding: 25px 28px;
+
+    background: #ffffff;
+
+    border: 1px solid #e3daf1;
+    border-left: 5px solid #7654c7;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 6px 20px rgba(72, 48, 120, 0.07);
+
+    color: #51475f;
+
+    font-size: 15px;
+
+    line-height: 1.75;
+}
+
+.conclusion strong {
+    color: #543493;
+}
+
+
+/* =========================================================
+   GENERAL CONTENT CARD SUPPORT
+   ========================================================= */
+
+.card,
+.content-card {
+    background: #ffffff;
+
+    border: 1px solid #e3daf1;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 6px 20px rgba(72, 48, 120, 0.06);
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+::-webkit-scrollbar-track {
+    background: #eeeaf5;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #b5a5d6;
+
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #7654c7;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+
+    .main-content {
+        padding: 30px 32px 60px;
+    }
+
+    .card-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .metric-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .feature-list {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .best-model .card-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+@media (max-width: 850px) {
+
+    .main-content {
+        margin-left: 0;
+
+        padding: 22px;
+    }
+
+    .page-header {
+        padding: 24px;
+    }
+
+    .page-header h1 {
+        font-size: 25px;
+    }
+
+    .section-title h2 {
+        font-size: 20px;
+    }
+
+    .section-description {
+        margin-left: 0;
+    }
+
+    .card-grid,
+    .metric-grid,
+    .feature-list,
+    .chart-grid,
+    .best-model .card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .model-selector select {
+        width: 100%;
+    }
+
+    .table-container {
+        border-radius: 12px;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .main-content {
+        padding: 18px;
+    }
+
+    .page-header {
+        padding: 20px;
+    }
+
+    .page-header h1 {
+        font-size: 22px;
+    }
+
+    .section-title {
+        gap: 9px;
+    }
+
+    .step-number {
+        width: 32px;
+        height: 32px;
+
+        font-size: 13px;
+    }
+
+    .section-title h2 {
+        font-size: 18px;
+    }
+
+    .info-card {
+        padding: 18px;
+    }
+
+    .metric-card {
+        padding: 20px;
+    }
+
+    .chart-card {
+        padding: 14px;
+    }
+}
+
+</style>
+
+
+<!-- =====================================================
+     PAGE HEADER
+     ===================================================== -->
+
+<div class="page-header">
+
+    <h1>
+        Linear Regression Analysis
+    </h1>
+
+    <p>
+        PM2.5 prediction using Linear, Ridge and Lasso Regression
+    </p>
+
+</div>
+
+
+{% if error %}
+
+<div class="error-box">
+
+    <strong>
+        Linear Regression Error
+    </strong>
+
+    <br><br>
+
+    {{ error }}
+
+</div>
+
+{% endif %}
+
+
+{% if result %}
+
+
+<!-- =====================================================
+     STEP 1
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            1
+        </div>
+
+        <h2>
+            Problem Definition
+        </h2>
+
+    </div>
+
+
+    <div class="card-grid">
+
+        <div class="info-card">
+
+            <div class="label">
+                Objective
+            </div>
+
+            <div class="value">
+                {{ result["problem_definition"]["title"] }}
+            </div>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <div class="label">
+                Target
+            </div>
+
+            <div class="value">
+                {{ result["problem_definition"]["target"] }}
+            </div>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <div class="label">
+                Problem Type
+            </div>
+
+            <div class="value">
+                {{ result["problem_definition"]["problem_type"] }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <p class="section-description">
+
+        {{ result["problem_definition"]["objective"] }}
+
+        <br><br>
+
+        <strong>
+            Why regression?
+        </strong>
+
+        {{ result["problem_definition"]["reason"] }}
+
+    </p>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 2
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            2
+        </div>
+
+        <h2>
+            Select Regression Type
+        </h2>
+
+    </div>
+
+
+    <div class="model-selector">
+
+        <form
+            method="GET"
+            action="{{ url_for('linear_regression_page') }}"
+        >
+
+            <label for="model">
+                Select Regression Model
+            </label>
+
+
+            <select
+                id="model"
+                name="model"
+                onchange="this.form.submit()"
+            >
+
+                <option
+                    value="linear"
+                    {% if result["selected_model_key"] == "linear" %}
+                        selected
+                    {% endif %}
+                >
+                    Linear Regression
+                </option>
+
+
+                <option
+                    value="ridge"
+                    {% if result["selected_model_key"] == "ridge" %}
+                        selected
+                    {% endif %}
+                >
+                    Ridge Regression
+                </option>
+
+
+                <option
+                    value="lasso"
+                    {% if result["selected_model_key"] == "lasso" %}
+                        selected
+                    {% endif %}
+                >
+                    Lasso Regression
+                </option>
+
+            </select>
+
+
+            <br>
+
+            <button
+                type="submit"
+                class="submit-btn"
+            >
+                Run Selected Model
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <div class="note">
+
+        Currently selected model:
+
+        <strong>
+            {{ result["selected_model_name"] }}
+        </strong>
+
+        <br>
+
+        Changing the dropdown compares the selected
+        model while keeping Linear, Ridge and Lasso
+        available for model comparison.
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 3
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            3
+        </div>
+
+        <h2>
+            Dataset Information
+        </h2>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Information
+                    </th>
+
+                    <th>
+                        Value
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for key, value in result["dataset_information"].items() %}
+
+                <tr>
+
+                    <td>
+                        {{ key }}
+                    </td>
+
+                    <td>
+                        {{ value }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 4
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            4
+        </div>
+
+        <h2>
+            Feature & Target Selection
+        </h2>
+
+    </div>
+
+
+    <div class="card-grid">
+
+        <div class="info-card">
+
+            <div class="label">
+                Target
+            </div>
+
+            <div class="value">
+                {{ result["feature_target_information"]["Target"] }}
+            </div>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <div class="label">
+                Original Features
+            </div>
+
+            <div class="value">
+                {{ result["feature_target_information"]["Total original features"] }}
+            </div>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <div class="label">
+                Numeric Features
+            </div>
+
+            <div class="value">
+                {{ result["feature_target_information"]["Numeric feature count"] }}
+            </div>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <div class="label">
+                Categorical Features
+            </div>
+
+            <div class="value">
+                {{ result["feature_target_information"]["Categorical feature count"] }}
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <p class="section-description">
+
+        Selected target:
+
+        <strong>
+            {{ result["feature_target_information"]["Target"] }}
+        </strong>
+
+        <br>
+
+        {{ result["feature_target_information"]["Target description"] }}
+
+    </p>
+
+
+    <div class="feature-list">
+
+    {% for feature in result["feature_target_information"]["Feature list"] %}
+
+        <div class="feature-item">
+            {{ feature }}
+        </div>
+
+    {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 5
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            5
+        </div>
+
+        <h2>
+            Preprocessing Summary
+        </h2>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Preprocessing Item
+                    </th>
+
+                    <th>
+                        Value
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for key, value in result["preprocessing_summary"].items() %}
+
+                <tr>
+
+                    <td>
+                        {{ key }}
+                    </td>
+
+                    <td>
+                        {{ value }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <div class="note">
+
+        The preprocessing is fitted using the training
+        data only. Test data is transformed using the
+        already-fitted preprocessing objects.
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 6
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            6
+        </div>
+
+        <h2>
+            Model Configuration
+        </h2>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Configuration
+                    </th>
+
+                    <th>
+                        Value
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for key, value in result["model_configuration"].items() %}
+
+                <tr>
+
+                    <td>
+                        {{ key }}
+                    </td>
+
+                    <td>
+                        {{ value }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 7
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            7
+        </div>
+
+        <h2>
+            Model Evaluation
+        </h2>
+
+    </div>
+
+
+    <p class="section-description">
+
+        Evaluation metrics for the selected regression model.
+
+        Lower MAE, MSE and RMSE are better.
+        Higher R² is better.
+
+    </p>
+
+
+    <div class="metric-grid">
+
+        <div class="metric-card">
+
+            <div class="metric-name">
+                MAE
+            </div>
+
+            <div class="metric-value">
+                {{ result["evaluation"]["MAE"] }}
+            </div>
+
+        </div>
+
+
+        <div class="metric-card">
+
+            <div class="metric-name">
+                MSE
+            </div>
+
+            <div class="metric-value">
+                {{ result["evaluation"]["MSE"] }}
+            </div>
+
+        </div>
+
+
+        <div class="metric-card">
+
+            <div class="metric-name">
+                RMSE
+            </div>
+
+            <div class="metric-value">
+                {{ result["evaluation"]["RMSE"] }}
+            </div>
+
+        </div>
+
+
+        <div class="metric-card">
+
+            <div class="metric-name">
+                R²
+            </div>
+
+            <div class="metric-value">
+                {{ result["evaluation"]["R2"] }}
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 8
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            8
+        </div>
+
+        <h2>
+            Actual vs Predicted Table
+        </h2>
+
+    </div>
+
+
+    <p class="section-description">
+
+        First 50 predictions from the 2017 test dataset.
+
+        Error is calculated as:
+
+        <strong>
+            Actual - Predicted
+        </strong>
+
+    </p>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Date & Time
+                    </th>
+
+                    <th>
+                        Station
+                    </th>
+
+                    <th>
+                        Actual PM2.5
+                    </th>
+
+                    <th>
+                        Predicted PM2.5
+                    </th>
+
+                    <th>
+                        Error
+                    </th>
+
+                    <th>
+                        Absolute Error
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for row in result["prediction_table"] %}
+
+                <tr>
+
+                    <td>
+                        {{ row["datetime"] }}
+                    </td>
+
+                    <td>
+                        {{ row["station"] }}
+                    </td>
+
+                    <td>
+                        {{ row["actual"] }}
+                    </td>
+
+                    <td>
+                        {{ row["predicted"] }}
+                    </td>
+
+                    <td>
+                        {{ row["error"] }}
+                    </td>
+
+                    <td>
+                        {{ row["absolute_error"] }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 9
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            9
+        </div>
+
+        <h2>
+            Feature Coefficients Table
+        </h2>
+
+    </div>
+
+
+    <p class="section-description">
+
+        The table shows the top 30 features according
+        to absolute coefficient magnitude.
+
+        Because the features are standardized, the
+        coefficient represents the effect associated
+        with a one-standard-deviation change in the
+        transformed feature.
+
+    </p>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Feature
+                    </th>
+
+                    <th>
+                        Coefficient
+                    </th>
+
+                    <th>
+                        Absolute Coefficient
+                    </th>
+
+                    <th>
+                        Direction
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for row in result["coefficient_table"] %}
+
+                <tr>
+
+                    <td>
+                        {{ row["feature"] }}
+                    </td>
+
+                    <td>
+                        {{ row["coefficient"] }}
+                    </td>
+
+                    <td>
+                        {{ row["absolute_coefficient"] }}
+                    </td>
+
+                    <td>
+                        {{ row["direction"] }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <div class="note">
+
+        Model intercept:
+
+        <strong>
+            {{ result["intercept"] }}
+        </strong>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 10
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            10
+        </div>
+
+        <h2>
+            Correlation Table
+        </h2>
+
+    </div>
+
+
+    <p class="section-description">
+
+        Pearson correlation between the original
+        numeric features and PM2.5 using the training
+        data.
+
+    </p>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Feature
+                    </th>
+
+                    <th>
+                        Correlation
+                    </th>
+
+                    <th>
+                        Direction
+                    </th>
+
+                    <th>
+                        Strength
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for row in result["correlation_table"] %}
+
+                <tr>
+
+                    <td>
+                        {{ row["feature"] }}
+                    </td>
+
+                    <td>
+                        {{ row["correlation"] }}
+                    </td>
+
+                    <td>
+                        {{ row["direction"] }}
+                    </td>
+
+                    <td>
+                        {{ row["strength"] }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 11
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            11
+        </div>
+
+        <h2>
+            Prediction Error Analysis
+        </h2>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Error Analysis
+                    </th>
+
+                    <th>
+                        Value
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for key, value in result["error_analysis"].items() %}
+
+                <tr>
+
+                    <td>
+                        {{ key }}
+                    </td>
+
+                    <td>
+
+                        {% if "Percentage" in key %}
+
+                            {{ "%.2f"|format(value) }} %
+
+                        {% else %}
+
+                            {{ "%.6f"|format(value) }}
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 12
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            12
+        </div>
+
+        <h2>
+            Actual vs Predicted Graph
+        </h2>
+
+    </div>
+
+
+    <div class="chart-card">
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename=result['charts']['actual_vs_predicted']
+            ) }}"
+            alt="Actual vs Predicted"
+        >
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 13
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            13
+        </div>
+
+        <h2>
+            Residual Analysis Graph
+        </h2>
+
+    </div>
+
+
+    <div class="chart-card">
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename=result['charts']['residual_analysis']
+            ) }}"
+            alt="Residual Analysis"
+        >
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 14
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            14
+        </div>
+
+        <h2>
+            Feature Coefficient Graph
+        </h2>
+
+    </div>
+
+
+    <div class="chart-card">
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename=result['charts']['feature_coefficients']
+            ) }}"
+            alt="Feature Coefficients"
+        >
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 15
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            15
+        </div>
+
+        <h2>
+            Correlation Graph
+        </h2>
+
+    </div>
+
+
+    <div class="chart-card">
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename=result['charts']['correlation']
+            ) }}"
+            alt="Correlation with PM2.5"
+        >
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 16
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            16
+        </div>
+
+        <h2>
+            Model Comparison
+        </h2>
+
+    </div>
+
+
+    <p class="section-description">
+
+        All three models are trained on the same
+        training and testing data.
+
+    </p>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Model
+                    </th>
+
+                    <th>
+                        MAE
+                    </th>
+
+                    <th>
+                        MSE
+                    </th>
+
+                    <th>
+                        RMSE
+                    </th>
+
+                    <th>
+                        R²
+                    </th>
+
+                    <th>
+                        Non-Zero Coefficients
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for row in result["model_comparison"] %}
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            {{ row["model"] }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ row["MAE"] }}
+                    </td>
+
+                    <td>
+                        {{ row["MSE"] }}
+                    </td>
+
+                    <td>
+                        {{ row["RMSE"] }}
+                    </td>
+
+                    <td>
+                        {{ row["R2"] }}
+                    </td>
+
+                    <td>
+                        {{ row["non_zero_coefficients"] }}
+                    </td>
+
+                    <td>
+
+                        {% if row["selected"] %}
+
+                            <span class="badge selected">
+                                Selected
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge">
+                                Compared
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 17
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            17
+        </div>
+
+        <h2>
+            Best Model
+        </h2>
+
+    </div>
+
+
+    <div class="best-model">
+
+        <div class="best-model-name">
+
+            {{ result["best_model"]["name"] }}
+
+        </div>
+
+
+        <div class="card-grid">
+
+            <div class="info-card">
+
+                <div class="label">
+                    MAE
+                </div>
+
+                <div class="value">
+                    {{ result["best_model"]["MAE"] }}
+                </div>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="label">
+                    MSE
+                </div>
+
+                <div class="value">
+                    {{ result["best_model"]["MSE"] }}
+                </div>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="label">
+                    RMSE
+                </div>
+
+                <div class="value">
+                    {{ result["best_model"]["RMSE"] }}
+                </div>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="label">
+                    R²
+                </div>
+
+                <div class="value">
+                    {{ result["best_model"]["R2"] }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="note">
+
+            Best model is selected using the
+
+            <strong>
+                lowest RMSE
+            </strong>
+
+            among Linear, Ridge and Lasso Regression.
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 18
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            18
+        </div>
+
+        <h2>
+            Regularization Comparison
+        </h2>
+
+    </div>
+
+
+    <p class="section-description">
+
+        Linear Regression uses no regularization.
+        Ridge uses L2 regularization.
+        Lasso uses L1 regularization.
+
+    </p>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Model
+                    </th>
+
+                    <th>
+                        Regularization
+                    </th>
+
+                    <th>
+                        Penalty
+                    </th>
+
+                    <th>
+                        Alpha
+                    </th>
+
+                    <th>
+                        RMSE
+                    </th>
+
+                    <th>
+                        R²
+                    </th>
+
+                    <th>
+                        Non-Zero Coefficients
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for row in result["regularization_comparison"] %}
+
+                <tr>
+
+                    <td>
+                        {{ row["model"] }}
+                    </td>
+
+                    <td>
+                        {{ row["regularization"] }}
+                    </td>
+
+                    <td>
+                        {{ row["penalty"] }}
+                    </td>
+
+                    <td>
+                        {{ row["alpha"] }}
+                    </td>
+
+                    <td>
+                        {{ row["RMSE"] }}
+                    </td>
+
+                    <td>
+                        {{ row["R2"] }}
+                    </td>
+
+                    <td>
+                        {{ row["non_zero"] }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    <div class="note">
+
+        <strong>
+            Ridge:
+        </strong>
+
+        L2 regularization discourages large
+        coefficients.
+
+        <br><br>
+
+        <strong>
+            Lasso:
+        </strong>
+
+        L1 regularization can force some coefficients
+        to exactly zero, which can help with feature
+        selection.
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     STEP 19
+     ===================================================== -->
+
+<section class="section">
+
+    <div class="section-title">
+
+        <div class="step-number">
+            19
+        </div>
+
+        <h2>
+            Conclusion
+        </h2>
+
+    </div>
+
+
+    <div class="conclusion">
+
+        {{ result["conclusion"] }}
+
+    </div>
+
+</section>
+
+
+{% endif %}
+
+{% endblock %}
