@@ -4,14 +4,15 @@ from sklearn.model_selection import train_test_split
 
 from sklearn.linear_model import (
     LinearRegression,
+    Lasso,
+    Ridge,
     LogisticRegression
 )
 
 from sklearn.metrics import (
     mean_squared_error,
     r2_score,
-    accuracy_score,
-    classification_report
+    accuracy_score
 )
 
 
@@ -120,11 +121,92 @@ def run_regression(df):
         predictions
     )
 
-    results["linear_mse"] = round(mse, 3)
-    results["linear_r2"] = round(r2, 3)
+    results["linear_mse"] = round(
+        mse,
+        3
+    )
+
+    results["linear_r2"] = round(
+        r2,
+        3
+    )
 
     # =================================================
-    # LOGISTIC REGRESSION
+    # L1 REGRESSION - LASSO
+    # =================================================
+
+    l1_model = Lasso(
+        alpha=1.0
+    )
+
+    l1_model.fit(
+        X_train,
+        y_train
+    )
+
+    predictions = l1_model.predict(
+        X_test
+    )
+
+    mse = mean_squared_error(
+        y_test,
+        predictions
+    )
+
+    r2 = r2_score(
+        y_test,
+        predictions
+    )
+
+    results["l1_mse"] = round(
+        mse,
+        3
+    )
+
+    results["l1_r2"] = round(
+        r2,
+        3
+    )
+
+    # =================================================
+    # L2 REGRESSION - RIDGE
+    # =================================================
+
+    l2_model = Ridge(
+        alpha=1.0
+    )
+
+    l2_model.fit(
+        X_train,
+        y_train
+    )
+
+    predictions = l2_model.predict(
+        X_test
+    )
+
+    mse = mean_squared_error(
+        y_test,
+        predictions
+    )
+
+    r2 = r2_score(
+        y_test,
+        predictions
+    )
+
+    results["l2_mse"] = round(
+        mse,
+        3
+    )
+
+    results["l2_r2"] = round(
+        r2,
+        3
+    )
+
+    # =================================================
+    # LOGISTIC REGRESSION - CLASSIFICATION
     # =================================================
 
     # Create binary air-quality class
