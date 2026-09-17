@@ -1,180 +1,191 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>AeroPure - EDA</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-
-</head>
+{% block title %}
+AeroPure - EDA
+{% endblock %}
 
 
-<body>
+{% block content %}
+
+<div class="page-header">
+
+    <h1>
+        Exploratory Data Analysis
+    </h1>
+
+    <p>
+        Explore the structure, distribution,
+        relationships and patterns in the dataset.
+    </p>
+
+</div>
 
 
-<aside class="sidebar">
+{% if error %}
 
-    <div class="logo">
-        ✈ AeroPure
-    </div>
+<div class="error-card">
 
-    <ul class="menu">
+    <h3>
+        EDA Error
+    </h3>
 
-        <li class="menu-item">
-            <a href="{{ url_for('home') }}">
-                🏠 <span>Home</span>
-            </a>
-        </li>
+    <p>
+        {{ error }}
+    </p>
 
-        <li class="menu-item">
-            <a href="{{ url_for('data_page') }}">
-                📊 <span>Data</span>
-            </a>
-        </li>
+</div>
 
-        <li class="menu-item active">
-            <a href="{{ url_for('eda_page') }}">
-                📈 <span>EDA</span>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="{{ url_for('preprocessing_page') }}">
-                ⚙️ <span>Preprocessing</span>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="{{ url_for('regression_page') }}">
-                📉 <span>Regression</span>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="{{ url_for('decision_tree_page') }}">
-                🌳 <span>Decision Tree</span>
-            </a>
-        </li>
-
-    </ul>
-
-</aside>
+{% endif %}
 
 
-<main class="main-content">
+{% if result %}
 
-    <div class="page-header">
 
-        <h1>
-            Exploratory Data Analysis
-        </h1>
+<div class="stats-container">
+
+
+    <div class="stat-card">
+
+        <h3>
+            Dataset Rows
+        </h3>
 
         <p>
-            Understand the structure and patterns
-            in the air-quality dataset.
+            {{ "{:,}".format(result.rows) }}
         </p>
 
     </div>
 
 
-    <div class="info-row">
+    <div class="stat-card">
 
+        <h3>
+            Dataset Columns
+        </h3>
 
-        <div class="info-box">
-
-            <h3>
-                Total Rows
-            </h3>
-
-            <p>
-                {{ results.rows }}
-            </p>
-
-        </div>
-
-
-        <div class="info-box">
-
-            <h3>
-                Total Columns
-            </h3>
-
-            <p>
-                {{ results.columns }}
-            </p>
-
-        </div>
-
-
-        <div class="info-box">
-
-            <h3>
-                Missing Values
-            </h3>
-
-            <p>
-                {{ results.missing }}
-            </p>
-
-        </div>
-
-
-        <div class="info-box">
-
-            <h3>
-                Duplicates
-            </h3>
-
-            <p>
-                {{ results.duplicates }}
-            </p>
-
-        </div>
-
+        <p>
+            {{ result.columns }}
+        </p>
 
     </div>
 
 
-    <section class="content-section">
+    <div class="stat-card">
 
-        <h2>
-            Statistical Summary
-        </h2>
+        <h3>
+            Duplicate Rows
+        </h3>
 
-        <div class="table-container">
+        <p>
+            {{ "{:,}".format(result.duplicates) }}
+        </p>
 
-            {{ results.statistics | safe }}
-
-        </div>
-
-    </section>
+    </div>
 
 
-    <section class="content-section">
+    <div class="stat-card">
 
-        <h2>
-            Correlation Analysis
-        </h2>
+        <h3>
+            Charts Generated
+        </h3>
 
-        <div class="table-container">
+        <p>
+            {{ result.charts|length }}
+        </p>
 
-            {{ results.correlation | safe }}
-
-        </div>
-
-    </section>
+    </div>
 
 
-</main>
+</div>
 
 
-</body>
+<div class="content-card">
 
-</html>
+    <h2>
+        Missing Values
+    </h2>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Column
+                    </th>
+
+                    <th>
+                        Missing Values
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for column, value in result.missing.items() %}
+
+                <tr>
+
+                    <td>
+                        {{ column }}
+                    </td>
+
+                    <td>
+                        {{ "{:,}".format(value) }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<div class="content-card">
+
+    <h2>
+        EDA Visualizations
+    </h2>
+
+    <p>
+        The following visualizations were generated
+        from the dataset.
+    </p>
+
+</div>
+
+
+<div class="graphs">
+
+{% for chart in result.charts %}
+
+    <div class="graph-card">
+
+        <img
+            src="{{ chart }}"
+            alt="EDA Chart"
+            loading="lazy"
+        >
+
+    </div>
+
+{% endfor %}
+
+</div>
+
+
+{% endif %}
+
+{% endblock %}

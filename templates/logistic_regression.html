@@ -1,0 +1,2324 @@
+{% extends "base.html" %}
+
+{% block title %}
+Logistic Regression Analysis - AeroPure
+{% endblock %}
+
+{% block content %}
+
+<style>
+
+/* =========================================================
+   AEROPURE - LOGISTIC REGRESSION PAGE
+   ========================================================= */
+
+.logistic-page {
+    padding: 8px 18px 50px 18px;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.logistic-header {
+    background: linear-gradient(
+        135deg,
+        #f0edff 0%,
+        #f8f6ff 100%
+    );
+
+    border-radius: 18px;
+    padding: 24px 28px;
+    margin-bottom: 34px;
+
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    border: 1px solid #e4dcff;
+}
+
+.logistic-header-icon {
+    width: 68px;
+    height: 68px;
+
+    background: linear-gradient(
+        135deg,
+        #6d3fd1,
+        #5530aa
+    );
+
+    border-radius: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    font-size: 34px;
+
+    box-shadow: 0 8px 20px rgba(90, 55, 170, 0.20);
+}
+
+.logistic-header h1 {
+    margin: 0;
+    color: #38227d;
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.logistic-header p {
+    margin: 8px 0 0;
+    color: #665a88;
+    font-size: 17px;
+}
+
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.logistic-section {
+    margin-bottom: 38px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 20px;
+}
+
+.section-number {
+    width: 36px;
+    height: 36px;
+
+    background: linear-gradient(
+        135deg,
+        #7142d4,
+        #552fa9
+    );
+
+    color: white;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    flex-shrink: 0;
+}
+
+.section-title h2 {
+    margin: 0;
+    color: #3e2782;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.section-line {
+    flex: 1;
+    height: 2px;
+    background: #ddd5f6;
+    margin-left: 5px;
+}
+
+
+/* =========================================================
+   PROBLEM CARDS
+   ========================================================= */
+
+.problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.problem-card {
+    background: white;
+
+    border: 1px solid #e2dcf4;
+    border-left: 5px solid #7651c7;
+
+    border-radius: 15px;
+
+    padding: 25px 26px;
+
+    min-height: 160px;
+
+    box-shadow: 0 5px 18px rgba(79, 50, 130, 0.07);
+
+    transition: all 0.25s ease;
+}
+
+.problem-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 28px rgba(79, 50, 130, 0.12);
+}
+
+.problem-label {
+    font-size: 15px;
+    color: #222;
+    margin-bottom: 4px;
+}
+
+.problem-value {
+    font-size: 18px;
+    font-weight: 500;
+    color: #181818;
+    margin-bottom: 14px;
+}
+
+.problem-description {
+    color: #4e4b58;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   WHY LOGISTIC REGRESSION
+   ========================================================= */
+
+.why-card {
+    margin-top: 14px;
+
+    background: linear-gradient(
+        135deg,
+        #f3efff,
+        #faf9ff
+    );
+
+    border: 1px solid #e0d8fa;
+
+    border-radius: 14px;
+
+    padding: 18px 24px;
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.why-icon {
+    font-size: 27px;
+}
+
+.why-title {
+    color: #3f2588;
+    font-weight: 700;
+    margin-right: 15px;
+}
+
+.why-text {
+    color: #5b5471;
+}
+
+
+/* =========================================================
+   MODEL SELECTION
+   ========================================================= */
+
+.model-selection-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 24px;
+
+    margin-top: 8px;
+}
+
+
+/* =========================================================
+   MODEL CARD
+   ========================================================= */
+
+.model-option {
+    position: relative;
+
+    display: block;
+
+    background: #ffffff;
+
+    border: 1.5px solid #ddd6ef;
+
+    border-radius: 18px;
+
+    padding: 30px 28px 27px 28px;
+
+    min-height: 190px;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+}
+
+.model-option:hover {
+    border-color: #7545d4;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 10px 28px rgba(94, 55, 175, 0.12);
+}
+
+
+/* =========================================================
+   SELECTED MODEL
+   ========================================================= */
+
+.model-option.selected {
+    border: 2px solid #7040d2;
+
+    background: linear-gradient(
+        135deg,
+        #fbf9ff 0%,
+        #f5f0ff 100%
+    );
+
+    box-shadow:
+        0 10px 30px rgba(104, 61, 205, 0.14);
+}
+
+
+/* =========================================================
+   RADIO INPUT
+   ========================================================= */
+
+.model-input {
+    position: absolute;
+
+    opacity: 0;
+
+    width: 1px;
+    height: 1px;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   RADIO CIRCLE
+   ========================================================= */
+
+.model-radio {
+    position: absolute;
+
+    top: 25px;
+    right: 25px;
+
+    width: 25px;
+    height: 25px;
+
+    border: 2px solid #c9c1df;
+
+    border-radius: 50%;
+
+    background: #ffffff;
+
+    box-sizing: border-box;
+
+    transition: all 0.2s ease;
+}
+
+.model-option.selected .model-radio {
+    border-color: #7040d2;
+}
+
+.model-option.selected .model-radio::after {
+    content: "";
+
+    position: absolute;
+
+    width: 11px;
+    height: 11px;
+
+    top: 5px;
+    left: 5px;
+
+    background: #7040d2;
+
+    border-radius: 50%;
+}
+
+
+/* =========================================================
+   MODEL ICON
+   ========================================================= */
+
+.model-icon {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 50%;
+
+    background: #f0eaff;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 24px;
+
+    margin-bottom: 18px;
+}
+
+.model-option.selected .model-icon {
+    background: #eee7ff;
+}
+
+
+/* =========================================================
+   MODEL NAME
+   ========================================================= */
+
+.model-name {
+    color: #30206f;
+
+    font-size: 19px;
+
+    font-weight: 700;
+
+    line-height: 1.3;
+
+    padding-right: 38px;
+
+    margin-bottom: 11px;
+}
+
+
+/* =========================================================
+   MODEL DESCRIPTION
+   ========================================================= */
+
+.model-description {
+    color: #6d6484;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+
+    max-width: 330px;
+}
+
+
+/* =========================================================
+   RUN BUTTON
+   ========================================================= */
+
+.run-model-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    background: linear-gradient(
+        135deg,
+        #7042d2,
+        #5630ac
+    );
+
+    color: white;
+
+    border: none;
+
+    border-radius: 9px;
+
+    padding: 12px 25px;
+
+    margin-top: 26px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 6px 15px rgba(89, 49, 172, 0.20);
+
+    transition: all 0.25s ease;
+}
+
+.run-model-btn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 9px 20px rgba(89, 49, 172, 0.28);
+}
+
+
+/* =========================================================
+   CURRENT MODEL
+   ========================================================= */
+
+.current-model {
+    margin-top: 18px;
+
+    padding: 17px 22px;
+
+    background: #f7f4ff;
+
+    border-left: 4px solid #7145ce;
+
+    border-radius: 9px;
+
+    color: #4d4564;
+
+    font-size: 15px;
+
+    box-shadow:
+        0 3px 12px rgba(79, 50, 130, 0.04);
+}
+
+
+/* =========================================================
+   GENERAL RESULT CARDS
+   ========================================================= */
+
+.result-card {
+    background: white;
+
+    border: 1px solid #e2dcf3;
+
+    border-radius: 15px;
+
+    padding: 24px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 5px 18px rgba(79, 50, 130, 0.06);
+
+    overflow-x: auto;
+}
+
+.result-card h3 {
+    margin-top: 0;
+
+    color: #3e2782;
+
+    font-size: 20px;
+
+    margin-bottom: 18px;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.logistic-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: white;
+
+    font-size: 14px;
+}
+
+.logistic-table th {
+    background: #eee9fb;
+
+    color: #3e2b78;
+
+    font-weight: 700;
+
+    padding: 13px 14px;
+
+    text-align: left;
+
+    border-bottom: 2px solid #d9d0ef;
+
+    white-space: nowrap;
+}
+
+.logistic-table td {
+    padding: 12px 14px;
+
+    border-bottom: 1px solid #ece8f4;
+
+    color: #403b48;
+
+    vertical-align: middle;
+}
+
+.logistic-table tbody tr:hover {
+    background: #faf8ff;
+}
+
+.logistic-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================================================
+   METRIC CARDS
+   ========================================================= */
+
+.metrics-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(150px, 1fr));
+
+    gap: 16px;
+}
+
+.metric-card {
+    background: linear-gradient(
+        135deg,
+        #faf8ff,
+        #f4f0ff
+    );
+
+    border: 1px solid #e2dafa;
+
+    border-radius: 13px;
+
+    padding: 20px;
+}
+
+.metric-label {
+    color: #6d6482;
+
+    font-size: 13px;
+
+    margin-bottom: 7px;
+}
+
+.metric-value {
+    color: #3c247f;
+
+    font-size: 25px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   CHARTS
+   ========================================================= */
+
+.chart-card {
+    background: white;
+
+    border: 1px solid #e3def1;
+
+    border-radius: 15px;
+
+    padding: 20px;
+
+    margin-bottom: 20px;
+
+    box-shadow:
+        0 5px 18px rgba(79, 50, 130, 0.06);
+
+    text-align: center;
+}
+
+.chart-card h3 {
+    color: #3f2881;
+
+    margin: 0 0 15px;
+
+    font-size: 19px;
+}
+
+.chart-card img {
+    max-width: 100%;
+    height: auto;
+
+    border-radius: 8px;
+}
+
+
+/* =========================================================
+   BEST MODEL
+   ========================================================= */
+
+.best-model-card {
+    background: linear-gradient(
+        135deg,
+        #f3edff,
+        #faf8ff
+    );
+
+    border: 1px solid #dcd0fa;
+
+    border-left: 5px solid #6e40d1;
+
+    border-radius: 15px;
+
+    padding: 25px;
+
+    box-shadow:
+        0 6px 20px rgba(87, 51, 165, 0.08);
+}
+
+.best-model-card h3 {
+    color: #432687;
+
+    margin-top: 0;
+}
+
+.best-model-name {
+    color: #2f1c6e;
+
+    font-size: 22px;
+
+    font-weight: 700;
+
+    margin-bottom: 10px;
+}
+
+
+/* =========================================================
+   CONCLUSION
+   ========================================================= */
+
+.conclusion-card {
+    background: linear-gradient(
+        135deg,
+        #f6f2ff,
+        #fbfaff
+    );
+
+    border: 1px solid #dfd6f5;
+
+    border-radius: 15px;
+
+    padding: 25px;
+
+    color: #4d465e;
+
+    line-height: 1.7;
+
+    box-shadow:
+        0 5px 18px rgba(79, 50, 130, 0.05);
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status-selected {
+    display: inline-block;
+
+    background: #e7f7ed;
+
+    color: #237a46;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+.status-compared {
+    display: inline-block;
+
+    background: #f0edf7;
+
+    color: #665c79;
+
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .problem-grid,
+    .model-selection-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .metrics-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+
+    .logistic-page {
+        padding: 8px 12px 35px;
+    }
+
+    .logistic-header {
+        padding: 20px;
+    }
+
+    .logistic-header h1 {
+        font-size: 26px;
+    }
+
+    .logistic-header p {
+        font-size: 14px;
+    }
+
+    .section-title h2 {
+        font-size: 21px;
+    }
+
+    .section-line {
+        display: none;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .problem-card,
+    .model-option {
+        padding: 20px;
+    }
+}
+
+</style>
+
+
+<div class="logistic-page">
+
+
+<!-- =====================================================
+     PAGE HEADER
+     ===================================================== -->
+
+<div class="logistic-header">
+
+    <div class="logistic-header-icon">
+        🎯
+    </div>
+
+    <div>
+
+        <h1>
+            Logistic Regression Analysis
+        </h1>
+
+        <p>
+            PM2.5 High/Low classification using Logistic Regression
+            with L1 and L2 regularization
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     1. PROBLEM DEFINITION
+     ===================================================== -->
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            1
+        </div>
+
+        <h2>
+            Problem Definition
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="problem-grid">
+
+
+        <div class="problem-card">
+
+            <div class="problem-label">
+                Objective
+            </div>
+
+            <div class="problem-value">
+                PM2.5 Air Quality Classification
+            </div>
+
+            <div class="problem-description">
+                Classify PM2.5 concentration as Low or High
+                using pollutant, meteorological and time-based
+                features.
+            </div>
+
+        </div>
+
+
+        <div class="problem-card">
+
+            <div class="problem-label">
+                Target
+            </div>
+
+            <div class="problem-value">
+                PM2.5_Class
+            </div>
+
+            <div class="problem-description">
+                Binary classification where 0 represents Low
+                PM2.5 and 1 represents High PM2.5.
+            </div>
+
+        </div>
+
+
+        <div class="problem-card">
+
+            <div class="problem-label">
+                Problem Type
+            </div>
+
+            <div class="problem-value">
+                Supervised Binary Classification
+            </div>
+
+            <div class="problem-description">
+                The target is converted into two classes,
+                making Logistic Regression suitable.
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="why-card">
+
+        <div class="why-icon">
+            💡
+        </div>
+
+        <div>
+
+            <span class="why-title">
+                Why Logistic Regression?
+            </span>
+
+            <span class="why-text">
+                The target is converted into two classes,
+                so Logistic Regression is suitable.
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     2. SELECT MODEL
+     ===================================================== -->
+
+<section class="logistic-section">
+
+
+    <div class="section-title">
+
+        <div class="section-number">
+            2
+        </div>
+
+        <h2>
+            Select Logistic Regression Type
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <form
+        method="GET"
+        action="{{ url_for('logistic_regression_page') }}"
+        id="logisticModelForm"
+    >
+
+
+        <div class="model-selection-grid">
+
+
+            <!-- =================================================
+                 LOGISTIC - NO REGULARIZATION
+                 ================================================= -->
+
+            <label
+                class="model-option
+                {% if result is defined and result.get('selected_model_key', 'logistic') == 'logistic' %}
+                    selected
+                {% endif %}"
+            >
+
+                <input
+                    type="radio"
+                    name="model"
+                    value="logistic"
+                    class="model-input"
+
+                    {% if result is defined and result.get('selected_model_key', 'logistic') == 'logistic' %}
+                        checked
+                    {% endif %}
+                >
+
+                <div class="model-radio"></div>
+
+
+                <div class="model-icon">
+                    ◯
+                </div>
+
+
+                <div class="model-name">
+                    Logistic Regression
+                    (No Regularization)
+                </div>
+
+
+                <div class="model-description">
+                    No penalty is applied to the model
+                    coefficients.
+                </div>
+
+            </label>
+
+
+            <!-- =================================================
+                 RIDGE - L2
+                 ================================================= -->
+
+            <label
+                class="model-option
+                {% if result is defined and result.get('selected_model_key') == 'ridge' %}
+                    selected
+                {% endif %}"
+            >
+
+                <input
+                    type="radio"
+                    name="model"
+                    value="ridge"
+                    class="model-input"
+
+                    {% if result is defined and result.get('selected_model_key') == 'ridge' %}
+                        checked
+                    {% endif %}
+                >
+
+                <div class="model-radio"></div>
+
+
+                <div class="model-icon">
+                    🛡️
+                </div>
+
+
+                <div class="model-name">
+                    Logistic Regression -
+                    Ridge (L2)
+                </div>
+
+
+                <div class="model-description">
+                    Squared coefficient penalty
+                    using L2 regularization.
+                </div>
+
+            </label>
+
+
+            <!-- =================================================
+                 LASSO - L1
+                 ================================================= -->
+
+            <label
+                class="model-option
+                {% if result is defined and result.get('selected_model_key') == 'lasso' %}
+                    selected
+                {% endif %}"
+            >
+
+                <input
+                    type="radio"
+                    name="model"
+                    value="lasso"
+                    class="model-input"
+
+                    {% if result is defined and result.get('selected_model_key') == 'lasso' %}
+                        checked
+                    {% endif %}
+                >
+
+                <div class="model-radio"></div>
+
+
+                <div class="model-icon">
+                    🔗
+                </div>
+
+
+                <div class="model-name">
+                    Logistic Regression -
+                    Lasso (L1)
+                </div>
+
+
+                <div class="model-description">
+                    Absolute coefficient penalty
+                    using L1 regularization.
+                </div>
+
+            </label>
+
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="run-model-btn"
+        >
+
+            ▶
+            Run Selected Model
+
+        </button>
+
+
+    </form>
+
+
+    {% if result is defined %}
+
+    <div class="current-model">
+
+        Currently selected model:
+
+        <strong>
+            {{ result.get(
+                'selected_model_name',
+                'Logistic Regression'
+            ) }}
+        </strong>
+
+    </div>
+
+    {% endif %}
+
+
+</section>
+
+
+<!-- =====================================================
+     3. DATASET INFORMATION
+     ===================================================== -->
+
+{% if result is defined and result.get('dataset_information') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            3
+        </div>
+
+        <h2>
+            Dataset Information
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="result-card">
+
+        <table class="logistic-table">
+
+            <tbody>
+
+            {% for key, value in result['dataset_information'].items() %}
+
+                <tr>
+
+                    <th>
+                        {{ key }}
+                    </th>
+
+                    <td>
+                        {{ value }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     4. FEATURE & TARGET INFORMATION
+     ===================================================== -->
+
+{% if result is defined and result.get('feature_target_information') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            4
+        </div>
+
+        <h2>
+            Feature & Target Selection
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="result-card">
+
+        <table class="logistic-table">
+
+            <tbody>
+
+            {% for key, value in result['feature_target_information'].items() %}
+
+                <tr>
+
+                    <th>
+                        {{ key }}
+                    </th>
+
+                    <td>
+                        {{ value }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     5. PREPROCESSING
+     ===================================================== -->
+
+{% if result is defined and result.get('preprocessing_summary') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            5
+        </div>
+
+        <h2>
+            Preprocessing Summary
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="result-card">
+
+        <table class="logistic-table">
+
+            <tbody>
+
+            {% for key, value in result['preprocessing_summary'].items() %}
+
+                <tr>
+
+                    <th>
+                        {{ key }}
+                    </th>
+
+                    <td>
+                        {{ value }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     6. MODEL CONFIGURATION
+     ===================================================== -->
+
+{% if result is defined and result.get('model_configuration') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            6
+        </div>
+
+        <h2>
+            Model Configuration
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="result-card">
+
+        <table class="logistic-table">
+
+            <tbody>
+
+            {% for key, value in result['model_configuration'].items() %}
+
+                <tr>
+
+                    <th>
+                        {{ key }}
+                    </th>
+
+                    <td>
+                        {{ value }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     7. MODEL EVALUATION
+     ===================================================== -->
+
+{% if result is defined and result.get('evaluation') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            7
+        </div>
+
+        <h2>
+            Model Evaluation
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="metrics-grid">
+
+        {% for key, value in result['evaluation'].items() %}
+
+        <div class="metric-card">
+
+            <div class="metric-label">
+                {{ key }}
+            </div>
+
+            <div class="metric-value">
+                {{ value }}
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     8. PREDICTION TABLE
+     ===================================================== -->
+
+{% if result is defined and result.get('prediction_table') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            8
+        </div>
+
+        <h2>
+            Actual vs Predicted Table
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="result-card">
+
+        <table class="logistic-table">
+
+            <thead>
+
+                <tr>
+
+                    {% for key in result['prediction_table'][0].keys() %}
+
+                    <th>
+                        {{ key }}
+                    </th>
+
+                    {% endfor %}
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for row in result['prediction_table'] %}
+
+                <tr>
+
+                {% for value in row.values() %}
+
+                    <td>
+                        {{ value }}
+                    </td>
+
+                {% endfor %}
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     9. FEATURE COEFFICIENTS
+     ===================================================== -->
+
+{% if result is defined and result.get('coefficient_table') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            9
+        </div>
+
+        <h2>
+            Feature Coefficients
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="result-card">
+
+        <table class="logistic-table">
+
+            <thead>
+
+                <tr>
+
+                    {% for key in result['coefficient_table'][0].keys() %}
+
+                    <th>
+                        {{ key }}
+                    </th>
+
+                    {% endfor %}
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for row in result['coefficient_table'] %}
+
+                <tr>
+
+                {% for value in row.values() %}
+
+                    <td>
+                        {{ value }}
+                    </td>
+
+                {% endfor %}
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     10. INTERCEPT
+     ===================================================== -->
+
+{% if result is defined and result.get('intercept') is not none %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            10
+        </div>
+
+        <h2>
+            Model Intercept
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="result-card">
+
+        <strong>
+            Intercept:
+        </strong>
+
+        {{ result['intercept'] }}
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     11. CORRELATION
+     ===================================================== -->
+
+{% if result is defined and result.get('correlation_table') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            11
+        </div>
+
+        <h2>
+            Feature Correlation
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="result-card">
+
+        <table class="logistic-table">
+
+            <thead>
+
+                <tr>
+
+                    {% for key in result['correlation_table'][0].keys() %}
+
+                    <th>
+                        {{ key }}
+                    </th>
+
+                    {% endfor %}
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for row in result['correlation_table'] %}
+
+                <tr>
+
+                {% for value in row.values() %}
+
+                    <td>
+                        {{ value }}
+                    </td>
+
+                {% endfor %}
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     12. ERROR ANALYSIS
+     ===================================================== -->
+
+{% if result is defined and result.get('error_analysis') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            12
+        </div>
+
+        <h2>
+            Error Analysis
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="result-card">
+
+        <table class="logistic-table">
+
+            <tbody>
+
+            {% for key, value in result['error_analysis'].items() %}
+
+                <tr>
+
+                    <th>
+                        {{ key }}
+                    </th>
+
+                    <td>
+                        {{ value }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     13. CONFUSION MATRIX
+     ===================================================== -->
+
+{% if result is defined and result.get('charts', {}).get('confusion_matrix') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            13
+        </div>
+
+        <h2>
+            Confusion Matrix
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="chart-card">
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename=result['charts']['confusion_matrix']
+            ) }}"
+            alt="Confusion Matrix"
+        >
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     14. ROC CURVE
+     ===================================================== -->
+
+{% if result is defined and result.get('charts', {}).get('roc_curve') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            14
+        </div>
+
+        <h2>
+            ROC Curve
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="chart-card">
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename=result['charts']['roc_curve']
+            ) }}"
+            alt="ROC Curve"
+        >
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     15. FEATURE COEFFICIENT GRAPH
+     ===================================================== -->
+
+{% if result is defined and result.get('charts', {}).get('feature_coefficients') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            15
+        </div>
+
+        <h2>
+            Feature Coefficients Graph
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="chart-card">
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename=result['charts']['feature_coefficients']
+            ) }}"
+            alt="Feature Coefficients"
+        >
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     16. CORRELATION GRAPH
+     ===================================================== -->
+
+{% if result is defined and result.get('charts', {}).get('correlation') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            16
+        </div>
+
+        <h2>
+            Correlation Graph
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="chart-card">
+
+        <img
+            src="{{ url_for(
+                'static',
+                filename=result['charts']['correlation']
+            ) }}"
+            alt="Correlation Graph"
+        >
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     17. MODEL COMPARISON
+     ===================================================== -->
+
+{% if result is defined and result.get('model_comparison') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            17
+        </div>
+
+        <h2>
+            Model Comparison
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="result-card">
+
+        <p style="color:#625a73; margin-top:0;">
+
+            All Logistic Regression variants are trained using
+            the same training and testing data.
+
+        </p>
+
+
+        <table class="logistic-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Model</th>
+
+                    <th>Accuracy</th>
+
+                    <th>Precision</th>
+
+                    <th>Recall</th>
+
+                    <th>F1</th>
+
+                    <th>ROC-AUC</th>
+
+                    <th>Log Loss</th>
+
+                    <th>Non-Zero Coefficients</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for row in result['model_comparison'] %}
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            {{ row['model'] }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ row['Accuracy'] }}
+                    </td>
+
+                    <td>
+                        {{ row['Precision'] }}
+                    </td>
+
+                    <td>
+                        {{ row['Recall'] }}
+                    </td>
+
+                    <td>
+                        {{ row['F1'] }}
+                    </td>
+
+                    <td>
+                        {{ row['ROC_AUC'] }}
+                    </td>
+
+                    <td>
+                        {{ row['Log_Loss'] }}
+                    </td>
+
+                    <td>
+                        {{ row['non_zero_coefficients'] }}
+                    </td>
+
+                    <td>
+
+                        {% if row['selected'] %}
+
+                            <span class="status-selected">
+                                Selected
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-compared">
+                                Compared
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     18. BEST MODEL
+     ===================================================== -->
+
+{% if result is defined and result.get('best_model') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            18
+        </div>
+
+        <h2>
+            Best Model
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="best-model-card">
+
+        <h3>
+            Best Performing Model
+        </h3>
+
+
+        <div class="best-model-name">
+
+            {{ result['best_model'].get(
+                'model',
+                result.get('selected_model_name', '')
+            ) }}
+
+        </div>
+
+
+        {% for key, value in result['best_model'].items() %}
+
+            {% if key != 'model' %}
+
+            <p>
+
+                <strong>
+                    {{ key }}:
+                </strong>
+
+                {{ value }}
+
+            </p>
+
+            {% endif %}
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     19. REGULARIZATION COMPARISON
+     ===================================================== -->
+
+{% if result is defined and result.get('regularization_comparison') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            19
+        </div>
+
+        <h2>
+            Regularization Comparison
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="result-card">
+
+        <table class="logistic-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>Model</th>
+
+                    <th>Regularization</th>
+
+                    <th>Penalty</th>
+
+                    <th>C</th>
+
+                    <th>F1</th>
+
+                    <th>ROC-AUC</th>
+
+                    <th>Non-Zero Coefficients</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for row in result['regularization_comparison'] %}
+
+                <tr>
+
+                    <td>
+                        <strong>
+                            {{ row['model'] }}
+                        </strong>
+                    </td>
+
+                    <td>
+                        {{ row['regularization'] }}
+                    </td>
+
+                    <td>
+                        {{ row['penalty'] }}
+                    </td>
+
+                    <td>
+                        {{ row['C'] }}
+                    </td>
+
+                    <td>
+                        {{ row['F1'] }}
+                    </td>
+
+                    <td>
+                        {{ row['ROC_AUC'] }}
+                    </td>
+
+                    <td>
+                        {{ row['non_zero'] }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+<!-- =====================================================
+     CONCLUSION
+     ===================================================== -->
+
+{% if result is defined and result.get('conclusion') %}
+
+<section class="logistic-section">
+
+    <div class="section-title">
+
+        <div class="section-number">
+            ✓
+        </div>
+
+        <h2>
+            Conclusion
+        </h2>
+
+        <div class="section-line"></div>
+
+    </div>
+
+
+    <div class="conclusion-card">
+
+        {{ result['conclusion'] }}
+
+    </div>
+
+</section>
+
+{% endif %}
+
+
+</div>
+
+
+<!-- =====================================================
+     MODEL SELECTION JAVASCRIPT
+     ===================================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const modelOptions =
+        document.querySelectorAll(".model-option");
+
+    const modelInputs =
+        document.querySelectorAll(".model-input");
+
+
+    /* -----------------------------------------------
+       SELECT MODEL WHEN CARD IS CLICKED
+       ----------------------------------------------- */
+
+    modelOptions.forEach(function (option) {
+
+        option.addEventListener("click", function () {
+
+            const input =
+                option.querySelector(".model-input");
+
+
+            if (!input) {
+                return;
+            }
+
+
+            /* Select radio button */
+
+            input.checked = true;
+
+
+            /* Remove selected from all cards */
+
+            modelOptions.forEach(function (card) {
+
+                card.classList.remove("selected");
+
+            });
+
+
+            /* Add selected to clicked card */
+
+            option.classList.add("selected");
+
+        });
+
+    });
+
+
+    /* -----------------------------------------------
+       ALSO HANDLE RADIO CHANGE
+       ----------------------------------------------- */
+
+    modelInputs.forEach(function (input) {
+
+        input.addEventListener("change", function () {
+
+            modelOptions.forEach(function (card) {
+
+                card.classList.remove("selected");
+
+            });
+
+
+            const selectedCard =
+                input.closest(".model-option");
+
+
+            if (selectedCard) {
+
+                selectedCard.classList.add("selected");
+
+            }
+
+        });
+
+    });
+
+});
+
+</script>
+
+
+{% endblock %}

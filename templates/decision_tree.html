@@ -1,224 +1,1415 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
+{% block title %}
+Decision Tree - AeroPure
+{% endblock %}
 
-    <meta charset="UTF-8">
+{% block content %}
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<div class="decision-tree-page">
 
-    <title>AeroPure - Decision Tree</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-
-</head>
-
-
-<body>
-
-
-<aside class="sidebar">
-
-    <div class="logo">
-        ✈ AeroPure
-    </div>
-
-    <ul class="menu">
-
-        <li class="menu-item">
-            <a href="{{ url_for('home') }}">
-                🏠 <span>Home</span>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="{{ url_for('data_page') }}">
-                📊 <span>Data</span>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="{{ url_for('eda_page') }}">
-                📈 <span>EDA</span>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="{{ url_for('preprocessing_page') }}">
-                ⚙️ <span>Preprocessing</span>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="{{ url_for('regression_page') }}">
-                📉 <span>Regression</span>
-            </a>
-        </li>
-
-        <li class="menu-item active">
-            <a href="{{ url_for('decision_tree_page') }}">
-                🌳 <span>Decision Tree</span>
-            </a>
-        </li>
-
-    </ul>
-
-</aside>
-
-
-<main class="main-content">
-
+    <!-- ================================================= -->
+    <!-- HEADER -->
+    <!-- ================================================= -->
 
     <div class="page-header">
 
-        <h1>
-            Decision Tree &amp; Pruning
-        </h1>
+        <h1>Decision Tree & Boosting</h1>
 
         <p>
-            Comparison of Decision Tree performance
-            before and after pruning.
+            Decision Tree concepts, calculations,
+            algorithms and ensemble learning methods
+            for PM2.5 classification.
         </p>
 
     </div>
 
 
-    {% if results.error %}
+    <!-- ================================================= -->
+    <!-- 1. PROBLEM DEFINITION -->
+    <!-- ================================================= -->
 
-        <section class="content-section">
+    <section class="analysis-card">
 
-            <h2>
-                Error
-            </h2>
+        <h2>
+            <span class="section-number">1</span>
+            Problem Definition
+        </h2>
 
-            <p>
-                {{ results.error }}
-            </p>
+        <p>
+            The objective is to classify PM2.5 air quality
+            into two classes.
+        </p>
 
-        </section>
+        <ul>
 
-    {% else %}
+            <li>
+                <strong>Low PM2.5:</strong>
+                PM2.5 &lt; 35 µg/m³
+            </li>
 
+            <li>
+                <strong>High PM2.5:</strong>
+                PM2.5 ≥ 35 µg/m³
+            </li>
 
-        <div class="model-grid">
+        </ul>
 
-
-            <!-- BEFORE PRUNING -->
-
-            <div class="model-card">
-
-                <div class="model-icon">
-                    🌳
-                </div>
-
-                <h2>
-                    Before Pruning
-                </h2>
-
-                <p>
-                    Full Decision Tree without
-                    depth restrictions.
-                </p>
-
-                <h3>
-                    R² Score
-                </h3>
-
-                <div class="score">
-                    {{ results.r2_before }}
-                </div>
-
-                <h3>
-                    Mean Squared Error
-                </h3>
-
-                <div class="score">
-                    {{ results.mse_before }}
-                </div>
-
-                <h3>
-                    Tree Depth
-                </h3>
-
-                <div class="score">
-                    {{ results.depth_before }}
-                </div>
-
-            </div>
+    </section>
 
 
+    <!-- ================================================= -->
+    <!-- 2. SELECT ALGORITHM -->
+    <!-- ================================================= -->
 
-            <!-- AFTER PRUNING -->
+    <section class="analysis-card">
 
-            <div class="model-card">
+        <h2>
+            <span class="section-number">2</span>
+            Select Algorithm
+        </h2>
 
-                <div class="model-icon">
-                    ✂️
-                </div>
+        <div class="model-buttons">
 
-                <h2>
-                    After Pruning
-                </h2>
+            {% for model in result.available_models %}
 
-                <p>
-                    Decision Tree with depth and
-                    leaf-size restrictions.
-                </p>
+            <a
+                href="{{ url_for(
+                    'decision_tree_page',
+                    model=model
+                ) }}"
+                class="
+                    model-button
+                    {% if result.selected_model.key == model %}
+                    selected
+                    {% endif %}
+                "
+            >
 
-                <h3>
-                    R² Score
-                </h3>
+                {{ model.replace('_', ' ').title() }}
 
-                <div class="score">
-                    {{ results.r2_after }}
-                </div>
+            </a>
 
-                <h3>
-                    Mean Squared Error
-                </h3>
-
-                <div class="score">
-                    {{ results.mse_after }}
-                </div>
-
-                <h3>
-                    Tree Depth
-                </h3>
-
-                <div class="score">
-                    {{ results.depth_after }}
-                </div>
-
-            </div>
-
+            {% endfor %}
 
         </div>
 
+    </section>
 
-        <section class="content-section">
 
-            <h2>
-                Pruning Analysis
-            </h2>
+    <!-- ================================================= -->
+    <!-- 3. DATASET INFORMATION -->
+    <!-- ================================================= -->
 
-            <p>
-                The Decision Tree is evaluated before and
-                after restricting its complexity. Pruning
-                helps reduce overfitting and can improve
-                generalization on unseen data.
-            </p>
+    <section class="analysis-card">
 
-        </section>
+        <h2>
+            <span class="section-number">3</span>
+            Dataset Information
+        </h2>
 
+        <div class="info-grid">
+
+            <div>
+                <span>Original Rows</span>
+                <strong>
+                    {{ "{:,}".format(
+                        result.dataset.original_rows
+                    ) }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Rows Used</span>
+                <strong>
+                    {{ "{:,}".format(
+                        result.dataset.sampled_rows
+                    ) }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Training Rows</span>
+                <strong>
+                    {{ "{:,}".format(
+                        result.dataset.training_rows
+                    ) }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Testing Rows</span>
+                <strong>
+                    {{ "{:,}".format(
+                        result.dataset.testing_rows
+                    ) }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Original Columns</span>
+                <strong>
+                    {{ result.dataset.original_columns }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Features Before Encoding</span>
+                <strong>
+                    {{ result.dataset.features_before_encoding }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Features After Encoding</span>
+                <strong>
+                    {{ result.dataset.features_after_encoding }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Target</span>
+                <strong>
+                    {{ result.dataset.target }}
+                </strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 4. FEATURE SELECTION -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">4</span>
+            Feature Selection
+        </h2>
+
+        <p>
+            Numeric and categorical air-quality features
+            are used to predict PM2.5 class.
+        </p>
+
+        <div class="feature-list">
+
+            {% for feature in result.features %}
+
+            <span class="feature-tag">
+                {{ feature }}
+            </span>
+
+            {% endfor %}
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 5. ENTROPY -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">5</span>
+            Entropy
+        </h2>
+
+        <p>
+            Entropy measures the impurity or uncertainty
+            in a dataset.
+        </p>
+
+        <div class="formula">
+            H(S) = -Σ pᵢ log₂(pᵢ)
+        </div>
+
+        <h3>Example Calculation</h3>
+
+        <p>
+            Total samples =
+            {{ result.concept_calculations.example_total }}
+        </p>
+
+        <p>
+            High =
+            {{ result.concept_calculations.high_count }}
+            and Low =
+            {{ result.concept_calculations.low_count }}
+        </p>
+
+        <p>
+            Therefore:
+        </p>
+
+        <div class="calculation">
+
+            H(S)
+            =
+            -
+            ({{ result.concept_calculations.high_probability }}
+            log₂({{ result.concept_calculations.high_probability }}))
+            -
+            ({{ result.concept_calculations.low_probability }}
+            log₂({{ result.concept_calculations.low_probability }}))
+
+            <br><br>
+
+            <strong>
+                Entropy =
+                {{ result.concept_calculations.entropy }}
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 6. INFORMATION GAIN -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">6</span>
+            Information Gain
+        </h2>
+
+        <p>
+            Information Gain measures how much uncertainty
+            is reduced after splitting the dataset.
+        </p>
+
+        <div class="formula">
+
+            IG =
+            H(parent)
+            -
+            Σ
+            (|child| / |parent|)
+            H(child)
+
+        </div>
+
+        <div class="calculation">
+
+            Information Gain =
+            {{ result.concept_calculations.information_gain }}
+
+        </div>
+
+        <p>
+            A higher Information Gain generally indicates
+            a better split for ID3.
+        </p>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 7. GINI -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">7</span>
+            Gini Impurity
+        </h2>
+
+        <p>
+            Gini impurity measures the probability of
+            incorrectly classifying a randomly selected
+            sample.
+        </p>
+
+        <div class="formula">
+
+            Gini =
+            1 - Σ pᵢ²
+
+        </div>
+
+        <div class="calculation">
+
+            Gini =
+            {{ result.concept_calculations.gini }}
+
+        </div>
+
+        <p>
+            CART commonly uses Gini impurity for
+            classification.
+        </p>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 8. GAIN RATIO -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">8</span>
+            Gain Ratio
+        </h2>
+
+        <p>
+            Gain Ratio normalizes Information Gain using
+            Split Information.
+        </p>
+
+        <div class="formula">
+
+            Gain Ratio =
+            Information Gain /
+            Split Information
+
+        </div>
+
+        <div class="calculation">
+
+            Split Information =
+            {{ result.concept_calculations.split_information }}
+
+            <br><br>
+
+            Gain Ratio =
+            {{ result.concept_calculations.gain_ratio }}
+
+        </div>
+
+        <p>
+            C4.5 uses Gain Ratio to select attributes.
+        </p>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 9. ID3 -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">9</span>
+            ID3
+        </h2>
+
+        <p>
+            <strong>ID3</strong> stands for
+            Iterative Dichotomiser 3.
+        </p>
+
+        <p>
+            ID3 uses <strong>Entropy</strong> and
+            <strong>Information Gain</strong> to choose
+            the best split.
+        </p>
+
+        <div class="algorithm-box">
+
+            <strong>Steps:</strong>
+
+            <ol>
+
+                <li>Calculate entropy.</li>
+
+                <li>Calculate Information Gain for each feature.</li>
+
+                <li>Select the feature with maximum Information Gain.</li>
+
+                <li>Split the dataset.</li>
+
+                <li>Repeat recursively.</li>
+
+            </ol>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 10. C4.5 -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">10</span>
+            C4.5
+        </h2>
+
+        <p>
+            C4.5 is an extension of ID3.
+            It uses <strong>Gain Ratio</strong>
+            instead of only Information Gain.
+        </p>
+
+        <ul>
+
+            <li>Handles continuous attributes.</li>
+
+            <li>Can handle missing values.</li>
+
+            <li>Uses pruning.</li>
+
+            <li>Uses Gain Ratio.</li>
+
+        </ul>
+
+        <p class="note">
+            The implementation here uses an entropy-based
+            sklearn Decision Tree as a practical C4.5
+            approximation; sklearn does not provide a
+            literal C4.5 implementation.
+        </p>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 11. CART -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">11</span>
+            CART
+        </h2>
+
+        <p>
+            <strong>CART</strong> means
+            <strong>Classification and Regression Trees</strong>.
+        </p>
+
+        <ul>
+
+            <li>
+                Classification commonly uses Gini impurity.
+            </li>
+
+            <li>
+                Regression commonly uses MSE.
+            </li>
+
+            <li>
+                CART creates binary splits.
+            </li>
+
+        </ul>
+
+        <div class="formula">
+
+            Gini =
+            1 - Σ pᵢ²
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 12. TREE CONSTRUCTION -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">12</span>
+            Tree Construction
+        </h2>
+
+        <ol>
+
+            <li>Start with the complete dataset.</li>
+
+            <li>Calculate impurity.</li>
+
+            <li>Evaluate possible splits.</li>
+
+            <li>Select the best split.</li>
+
+            <li>Create child nodes.</li>
+
+            <li>Repeat recursively.</li>
+
+            <li>Stop when a stopping condition is reached.</li>
+
+            <li>Assign predictions to leaf nodes.</li>
+
+        </ol>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 13. OVERFITTING -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">13</span>
+            Overfitting
+        </h2>
+
+        <p>
+            Overfitting occurs when a decision tree becomes
+            too complex and learns noise from the training
+            data instead of general patterns.
+        </p>
+
+        <ul>
+
+            <li>Very deep tree.</li>
+
+            <li>Very high training accuracy.</li>
+
+            <li>Lower test accuracy.</li>
+
+            <li>Poor generalization.</li>
+
+        </ul>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 14. PRUNING -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">14</span>
+            Pruning
+        </h2>
+
+        <p>
+            Pruning removes unnecessary branches from a
+            decision tree to reduce overfitting.
+        </p>
+
+        <h3>Pre-Pruning</h3>
+
+        <ul>
+
+            <li>max_depth</li>
+
+            <li>min_samples_split</li>
+
+            <li>min_samples_leaf</li>
+
+        </ul>
+
+        <h3>Post-Pruning</h3>
+
+        <p>
+            Cost-complexity pruning can be controlled using
+            <strong>ccp_alpha</strong>.
+        </p>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 15. REGRESSION TREE -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">15</span>
+            Regression Trees
+        </h2>
+
+        <p>
+            Regression Trees predict a continuous numerical
+            value instead of a class.
+        </p>
+
+        <div class="formula">
+
+            MSE =
+            (1/n) Σ(yᵢ - ŷ)²
+
+        </div>
+
+        <p>
+            The leaf generally predicts the mean target
+            value of samples reaching that leaf.
+        </p>
+
+        <p>
+            Common evaluation metrics:
+            MSE, RMSE, MAE and R².
+        </p>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 16. RANDOM FOREST -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">16</span>
+            Random Forest
+        </h2>
+
+        <p>
+            Random Forest is an ensemble of multiple
+            decision trees.
+        </p>
+
+        <ul>
+
+            <li>Uses bootstrap samples.</li>
+
+            <li>Uses random subsets of features.</li>
+
+            <li>Trees are trained independently.</li>
+
+            <li>Final classification uses voting.</li>
+
+        </ul>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 17. ADABOOST -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">17</span>
+            AdaBoost
+        </h2>
+
+        <p>
+            AdaBoost builds weak learners sequentially.
+            Misclassified observations receive more attention
+            in later rounds.
+        </p>
+
+        <div class="formula">
+
+            αₜ =
+            1/2 ln
+            ((1 - εₜ) / εₜ)
+
+        </div>
+
+        <p>
+            where εₜ is the weighted error of the weak learner.
+        </p>
+
+        <p>
+            The final prediction is a weighted combination
+            of the weak learners. It is <strong>not produced
+            by one final tree</strong>.
+        </p>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 18. GRADIENT BOOSTING -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">18</span>
+            Gradient Boosting
+        </h2>
+
+        <p>
+            Gradient Boosting builds trees sequentially.
+            Each new tree attempts to reduce the errors
+            of the previous model.
+        </p>
+
+        <div class="formula">
+
+            Fₘ(x) =
+            Fₘ₋₁(x) +
+            ηhₘ(x)
+
+        </div>
+
+        <p>
+            where η is the learning rate and hₘ(x) is
+            the new tree.
+        </p>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 19. XGBOOST -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">19</span>
+            XGBoost
+        </h2>
+
+        <p>
+            XGBoost is an optimized implementation of
+            gradient boosting using decision trees.
+        </p>
+
+        <p>
+            It adds regularization to control model
+            complexity.
+        </p>
+
+        <div class="formula">
+
+            Objective =
+            Loss +
+            Ω(model)
+
+        </div>
+
+        <p>
+            XGBoost combines the predictions of many
+            trees. There is <strong>no single final tree</strong>.
+        </p>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 20. LIGHTGBM -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">20</span>
+            LightGBM
+        </h2>
+
+        <p>
+            LightGBM is a fast gradient boosting framework
+            designed for efficient learning on large datasets.
+        </p>
+
+        <ul>
+
+            <li>Histogram-based learning.</li>
+
+            <li>Leaf-wise tree growth.</li>
+
+            <li>Fast training.</li>
+
+            <li>Efficient memory usage.</li>
+
+        </ul>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 21. SELECTED MODEL -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card selected-model-card">
+
+        <h2>
+            <span class="section-number">21</span>
+            Selected Model
+        </h2>
+
+        <h3>
+            {{ result.selected_model.name }}
+        </h3>
+
+        <p>
+            {{ result.selected_model.description }}
+        </p>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 22. TREE INFORMATION -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">22</span>
+            Tree Information
+        </h2>
+
+        {% if result.selected_model.tree_information %}
+
+        <div class="info-grid">
+
+            {% for key, value in
+                result.selected_model.tree_information.items()
+            %}
+
+            <div>
+
+                <span>
+                    {{ key.replace('_', ' ').title() }}
+                </span>
+
+                <strong>
+                    {{ value }}
+                </strong>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 23. FEATURE IMPORTANCE -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">23</span>
+            Feature Importance
+        </h2>
+
+        {% if result.feature_importance %}
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Feature</th>
+
+                    <th>Importance</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for row in result.feature_importance %}
+
+                <tr>
+
+                    <td>
+                        {{ row.feature }}
+                    </td>
+
+                    <td>
+                        {{ "%.6f"|format(
+                            row.importance
+                        ) }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 24. PREDICTIONS -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">24</span>
+            Actual vs Predicted
+        </h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Date & Time</th>
+
+                        <th>Actual</th>
+
+                        <th>Predicted</th>
+
+                        <th>Probability</th>
+
+                        <th>Result</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for row in result.prediction_table %}
+
+                    <tr>
+
+                        <td>
+                            {{ row.datetime }}
+                        </td>
+
+                        <td>
+                            {{ row.actual_label }}
+                        </td>
+
+                        <td>
+                            {{ row.predicted_label }}
+                        </td>
+
+                        <td>
+                            {{ row.probability }}
+                        </td>
+
+                        <td>
+
+                            {% if row.correct %}
+
+                            <span class="badge success">
+                                Correct
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge danger">
+                                Incorrect
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 25. ERROR ANALYSIS -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">25</span>
+            Error Analysis
+        </h2>
+
+        <div class="info-grid">
+
+            <div>
+                <span>True Negative</span>
+                <strong>
+                    {{ result.error_analysis.TN }}
+                </strong>
+            </div>
+
+            <div>
+                <span>False Positive</span>
+                <strong>
+                    {{ result.error_analysis.FP }}
+                </strong>
+            </div>
+
+            <div>
+                <span>False Negative</span>
+                <strong>
+                    {{ result.error_analysis.FN }}
+                </strong>
+            </div>
+
+            <div>
+                <span>True Positive</span>
+                <strong>
+                    {{ result.error_analysis.TP }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Correct</span>
+                <strong>
+                    {{ result.error_analysis.correct }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Incorrect</span>
+                <strong>
+                    {{ result.error_analysis.incorrect }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Error Percentage</span>
+                <strong>
+                    {{
+                        "%.4f"|format(
+                            result.error_analysis.error_percentage
+                        )
+                    }}%
+                </strong>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 26. CONFUSION MATRIX -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">26</span>
+            Confusion Matrix
+        </h2>
+
+        <div class="chart-container">
+
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename=result.charts.confusion_matrix
+                ) }}"
+                alt="Confusion Matrix"
+            >
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 27. FEATURE IMPORTANCE GRAPH -->
+    <!-- ================================================= -->
+
+    {% if result.charts.feature_importance %}
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">27</span>
+            Feature Importance Graph
+        </h2>
+
+        <div class="chart-container">
+
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename=result.charts.feature_importance
+                ) }}"
+                alt="Feature Importance"
+            >
+
+        </div>
+
+    </section>
 
     {% endif %}
 
 
-</main>
+    <!-- ================================================= -->
+    <!-- 28. TREE STRUCTURE -->
+    <!-- ================================================= -->
+
+    {% if result.charts.tree_structure %}
+
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">28</span>
+            Tree Structure
+        </h2>
+
+        <div class="chart-container">
+
+            <img
+                src="{{ url_for(
+                    'static',
+                    filename=result.charts.tree_structure
+                ) }}"
+                alt="Decision Tree Structure"
+            >
+
+        </div>
+
+    </section>
+
+    {% endif %}
 
 
-</body>
+    <!-- ================================================= -->
+    <!-- 29. MODEL COMPARISON -->
+    <!-- ================================================= -->
 
-</html>
+    <section class="analysis-card">
+
+        <h2>
+            <span class="section-number">29</span>
+            Model Comparison
+        </h2>
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Model</th>
+
+                        <th>Accuracy</th>
+
+                        <th>Precision</th>
+
+                        <th>Recall</th>
+
+                        <th>F1</th>
+
+                        <th>ROC-AUC</th>
+
+                        <th>Log Loss</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for row in result.model_comparison %}
+
+                    <tr>
+
+                        <td>
+                            {{ row.model }}
+                        </td>
+
+                        <td>
+                            {{ "%.4f"|format(
+                                row.accuracy
+                            ) }}
+                        </td>
+
+                        <td>
+                            {{ "%.4f"|format(
+                                row.precision
+                            ) }}
+                        </td>
+
+                        <td>
+                            {{ "%.4f"|format(
+                                row.recall
+                            ) }}
+                        </td>
+
+                        <td>
+                            {{ "%.4f"|format(
+                                row.f1
+                            ) }}
+                        </td>
+
+                        <td>
+                            {{ "%.4f"|format(
+                                row.roc_auc
+                            ) }}
+                        </td>
+
+                        <td>
+                            {{ "%.4f"|format(
+                                row.log_loss
+                            ) }}
+                        </td>
+
+                        <td>
+
+                            {% if row.status == "Best" %}
+
+                            <span class="badge best">
+                                Best
+                            </span>
+
+                            {% elif row.selected %}
+
+                            <span class="badge selected">
+                                Selected
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge">
+                                Compared
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 30. BEST MODEL -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card best-model-card">
+
+        <h2>
+            <span class="section-number">30</span>
+            Best Model
+        </h2>
+
+        <h3>
+            {{ result.best_model.name }}
+        </h3>
+
+        <div class="info-grid">
+
+            <div>
+
+                <span>Accuracy</span>
+
+                <strong>
+                    {{ "%.4f"|format(
+                        result.best_model.accuracy
+                    ) }}
+                </strong>
+
+            </div>
+
+            <div>
+
+                <span>F1 Score</span>
+
+                <strong>
+                    {{ "%.4f"|format(
+                        result.best_model.f1
+                    ) }}
+                </strong>
+
+            </div>
+
+            <div>
+
+                <span>ROC-AUC</span>
+
+                <strong>
+                    {{ "%.4f"|format(
+                        result.best_model.roc_auc
+                    ) }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+    <!-- 31. CONCLUSION -->
+    <!-- ================================================= -->
+
+    <section class="analysis-card conclusion-card">
+
+        <h2>
+            <span class="section-number">31</span>
+            Conclusion
+        </h2>
+
+        <p>
+
+            Decision Trees classify PM2.5 into low and high
+            air-quality classes using feature-based splits.
+            Entropy and Information Gain are associated with
+            ID3, Gain Ratio with C4.5, and Gini impurity with
+            CART.
+
+        </p>
+
+        <p>
+
+            Random Forest, AdaBoost, Gradient Boosting,
+            XGBoost and LightGBM improve prediction by
+            combining multiple decision-tree learners.
+
+        </p>
+
+        <p>
+
+            The best model is selected based primarily on
+            F1 score, followed by ROC-AUC and Log Loss.
+
+        </p>
+
+    </section>
+
+</div>
+
+{% endblock %}

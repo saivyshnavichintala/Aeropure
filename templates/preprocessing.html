@@ -1,158 +1,1138 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>AeroPure - Preprocessing</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-
-</head>
+{% block title %}
+AeroPure - Preprocessing
+{% endblock %}
 
 
-<body>
+{% block content %}
+
+<div class="page-header">
+
+    <h1>⚙️ Data Preprocessing</h1>
+
+    <p>
+        Complete data cleaning, transformation, encoding,
+        feature engineering and feature scaling pipeline
+        for the AeroPure air-quality dataset.
+    </p>
+
+</div>
 
 
-<aside class="sidebar">
+{% if error %}
 
-    <div class="logo">
-        ✈ AeroPure
+<div class="content-card error-card">
+
+    <h2>❌ Preprocessing Error</h2>
+
+    <p>{{ error }}</p>
+
+</div>
+
+{% endif %}
+
+
+{% if result %}
+
+
+<!-- =====================================================
+     1. DATASET OVERVIEW
+===================================================== -->
+
+<div class="content-card">
+
+    <h2>1. Dataset Overview</h2>
+
+    <p>
+        The AeroPure dataset contains hourly air-quality
+        observations collected from multiple monitoring
+        stations. The preprocessing pipeline prepares this
+        raw data for machine-learning models.
+    </p>
+
+    <div class="stats-container">
+
+        <div class="stat-card">
+            <h3>Original Rows</h3>
+            <p>
+                {{ "{:,}".format(result.original_rows) }}
+            </p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Original Columns</h3>
+            <p>
+                {{ result.original_columns }}
+            </p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Remaining Rows</h3>
+            <p>
+                {{ "{:,}".format(result.remaining_rows) }}
+            </p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Training Rows</h3>
+            <p>
+                {{ "{:,}".format(result.train_rows) }}
+            </p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Testing Rows</h3>
+            <p>
+                {{ "{:,}".format(result.test_rows) }}
+            </p>
+        </div>
+
+        <div class="stat-card">
+            <h3>One-Hot Features</h3>
+            <p>
+                {{ result.onehot_count }}
+            </p>
+        </div>
+
     </div>
 
-    <ul class="menu">
-
-        <li class="menu-item">
-            <a href="{{ url_for('home') }}">
-                🏠 <span>Home</span>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="{{ url_for('data_page') }}">
-                📊 <span>Data</span>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="{{ url_for('eda_page') }}">
-                📈 <span>EDA</span>
-            </a>
-        </li>
-
-        <li class="menu-item active">
-            <a href="{{ url_for('preprocessing_page') }}">
-                ⚙️ <span>Preprocessing</span>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="{{ url_for('regression_page') }}">
-                📉 <span>Regression</span>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="{{ url_for('decision_tree_page') }}">
-                🌳 <span>Decision Tree</span>
-            </a>
-        </li>
-
-    </ul>
-
-</aside>
+</div>
 
 
-<main class="main-content">
+<!-- =====================================================
+     2. DATA CLEANING
+===================================================== -->
+
+<div class="content-card">
+
+    <h2>2. Data Cleaning</h2>
+
+    <p>
+        Data cleaning removes unnecessary columns and
+        prepares the dataset for further processing.
+    </p>
+
+    <table class="data-table">
+
+        <tr>
+            <th>Cleaning Operation</th>
+            <th>Result</th>
+        </tr>
+
+        <tr>
+            <td>Original Rows</td>
+            <td>
+                {{ "{:,}".format(result.original_rows) }}
+            </td>
+        </tr>
+
+        <tr>
+            <td>Original Columns</td>
+            <td>
+                {{ result.original_columns }}
+            </td>
+        </tr>
+
+        <tr>
+            <td>Duplicate Column Removed</td>
+            <td>
+                {% if result.duplicate_column_removed %}
+                    Yes - Station
+                {% else %}
+                    No
+                {% endif %}
+            </td>
+        </tr>
+
+        <tr>
+            <td>Duplicate Records Removed</td>
+            <td>
+                {{ "{:,}".format(result.duplicate_count) }}
+            </td>
+        </tr>
+
+    </table>
+
+</div>
 
 
-    <div class="page-header">
+<!-- =====================================================
+     3. MISSING VALUES
+===================================================== -->
 
-        <h1>
-            Data Preprocessing
-        </h1>
+<div class="content-card">
+
+    <h2>3. Missing Value Handling</h2>
+
+    <p>
+        Missing values can reduce the quality of machine
+        learning models. Numerical missing values are handled
+        using median imputation, while categorical missing
+        values are handled using mode imputation.
+    </p>
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+                <th>Feature</th>
+                <th>Missing Before</th>
+                <th>Missing After</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for feature, value in result.missing_before.items() %}
+
+            <tr>
+
+                <td>
+                    <strong>{{ feature }}</strong>
+                </td>
+
+                <td>
+                    {{ "{:,}".format(value) }}
+                </td>
+
+                <td>
+                    {{ result.missing_after.get(feature, 0) }}
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    <div class="success-box">
+
+        <strong>Missing-value strategy</strong>
 
         <p>
-            Clean and transform the dataset
-            for machine-learning analysis.
+            Numerical variables → Median<br>
+            Categorical variables → Mode<br>
+            PM2.5 target → Rows with missing target removed
         </p>
 
     </div>
 
-
-    <div class="info-row">
-
-
-        <div class="info-box">
-
-            <h3>
-                Missing Before
-            </h3>
-
-            <p>
-                {{ results.missing_before }}
-            </p>
-
-        </div>
+</div>
 
 
-        <div class="info-box">
+<!-- =====================================================
+     4. DUPLICATE REMOVAL
+===================================================== -->
 
-            <h3>
-                Missing After
-            </h3>
+<div class="content-card">
 
-            <p>
-                {{ results.missing_after }}
-            </p>
+    <h2>4. Duplicate Removal</h2>
 
-        </div>
+    <p>
+        Duplicate hourly records can cause the same observation
+        to be counted multiple times. Duplicate records were
+        checked using station, year, month, day and hour.
+    </p>
 
+    <div class="highlight-text">
 
-        <div class="info-box">
+        <strong>
+            Duplicate records removed:
+        </strong>
 
-            <h3>
-                Outliers
-            </h3>
-
-            <p>
-                {{ results.outliers }}
-            </p>
-
-        </div>
-
+        {{ "{:,}".format(result.duplicate_count) }}
 
     </div>
 
+</div>
 
-    <section class="content-section">
 
-        <h2>
-            Preprocessed Dataset
-        </h2>
+<!-- =====================================================
+     5. OUTLIERS
+===================================================== -->
 
-        <p>
-            Numerical features are scaled using
-            Min-Max Scaling after IQR-based outlier handling.
-        </p>
+<div class="content-card">
 
-        <div class="table-container">
+    <h2>5. Outlier Detection & Treatment</h2>
 
-            {{ results.processed_data | safe }}
+    <p>
+        The Interquartile Range (IQR) method was used to
+        identify extreme observations.
+    </p>
+
+    <div class="formula-box">
+
+        IQR = Q3 − Q1
+
+        <br><br>
+
+        Lower Bound = Q1 − 1.5 × IQR
+
+        <br>
+
+        Upper Bound = Q3 + 1.5 × IQR
+
+    </div>
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+                <th>Feature</th>
+                <th>Q1</th>
+                <th>Q3</th>
+                <th>Outliers</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for feature, details in result.outliers.items() %}
+
+            <tr>
+
+                <td>
+                    <strong>{{ feature }}</strong>
+                </td>
+
+                <td>
+                    {{ "%.3f"|format(details.Q1) }}
+                </td>
+
+                <td>
+                    {{ "%.3f"|format(details.Q3) }}
+                </td>
+
+                <td>
+                    {{ "{:,}".format(details.count) }}
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    <div class="highlight-text">
+
+        Total outlier values treated:
+
+        <strong>
+            {{ "{:,}".format(result.total_outliers) }}
+        </strong>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     6. FEATURE ENGINEERING
+===================================================== -->
+
+<div class="content-card">
+
+    <h2>6. Feature Engineering</h2>
+
+    <p>
+        Feature engineering creates additional useful variables
+        from the existing date and time information.
+    </p>
+
+    <div class="feature-grid">
+
+        {% for feature in result.feature_engineering %}
+
+        <div class="feature-box">
+
+            {{ feature }}
 
         </div>
 
-    </section>
+        {% endfor %}
+
+    </div>
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+                <th>Feature</th>
+                <th>Purpose</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>datetime</td>
+                <td>Combines year, month, day and hour.</td>
+            </tr>
+
+            <tr>
+                <td>day_of_week</td>
+                <td>Represents the day of the week.</td>
+            </tr>
+
+            <tr>
+                <td>day_of_year</td>
+                <td>Represents the position of the day in the year.</td>
+            </tr>
+
+            <tr>
+                <td>is_weekend</td>
+                <td>Identifies weekend observations.</td>
+            </tr>
+
+            <tr>
+                <td>season</td>
+                <td>Represents Winter, Spring, Summer or Autumn.</td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>
 
 
-</main>
+<!-- =====================================================
+     7. CORRELATION
+===================================================== -->
+
+<div class="content-card">
+
+    <h2>7. Correlation Analysis</h2>
+
+    <p>
+        Correlation measures the strength and direction of
+        the relationship between numerical variables.
+    </p>
+
+    <div class="formula-box">
+
+        −1 ≤ Correlation ≤ +1
+
+    </div>
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+                <th>Feature</th>
+                <th>Correlation with PM2.5</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for feature, value in result.target_correlation.items() %}
+
+            <tr>
+
+                <td>
+                    <strong>{{ feature }}</strong>
+                </td>
+
+                <td>
+                    {{ "%.4f"|format(value) }}
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
 
 
-</body>
+<!-- CORRELATION HEATMAP -->
 
-</html>
+<div class="content-card">
+
+    <h2>Correlation Heatmap</h2>
+
+    <p>
+        The heatmap provides a visual representation of
+        relationships among the numerical variables.
+    </p>
+
+    <img
+        src="{{ url_for(
+            'static',
+            filename='preprocessing_charts/correlation_heatmap.png'
+        ) }}"
+        class="preprocessing-chart"
+        alt="Correlation Heatmap"
+    >
+
+</div>
+
+
+<!-- TARGET CORRELATION -->
+
+<div class="content-card">
+
+    <h2>Feature Correlation with PM2.5</h2>
+
+    <img
+        src="{{ url_for(
+            'static',
+            filename='preprocessing_charts/target_correlation.png'
+        ) }}"
+        class="preprocessing-chart"
+        alt="Target Correlation"
+    >
+
+</div>
+
+
+<!-- =====================================================
+     8. ONE HOT
+===================================================== -->
+
+<div class="content-card">
+
+    <h2>8. One-Hot Encoding</h2>
+
+    <p>
+        One-Hot Encoding converts categorical variables into
+        binary numerical variables. In AeroPure, station and
+        wind-direction information are converted into separate
+        encoded columns.
+    </p>
+
+    <div class="info-box">
+
+        <h3>
+            Number of One-Hot Features:
+            {{ result.onehot_count }}
+        </h3>
+
+    </div>
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+                <th>#</th>
+                <th>Encoded Feature</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for feature in result.onehot_features %}
+
+            <tr>
+
+                <td>
+                    {{ loop.index }}
+                </td>
+
+                <td>
+                    {{ feature }}
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<!-- ONE HOT GRAPH -->
+
+<div class="content-card">
+
+    <h2>One-Hot Encoding Graph</h2>
+
+    <img
+        src="{{ url_for(
+            'static',
+            filename='preprocessing_charts/one_hot_encoding.png'
+        ) }}"
+        class="preprocessing-chart"
+        alt="One Hot Encoding Graph"
+    >
+
+</div>
+
+
+<!-- =====================================================
+     9. ORDINAL
+===================================================== -->
+
+<div class="content-card">
+
+    <h2>9. Ordinal Encoding</h2>
+
+    <p>
+        Ordinal Encoding converts ordered categories into
+        numerical values while preserving their order.
+    </p>
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+                <th>Air Quality</th>
+                <th>Encoded Value</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for category, value in result.ordinal_mapping.items() %}
+
+            <tr>
+
+                <td>
+                    <strong>{{ category }}</strong>
+                </td>
+
+                <td>
+                    {{ value }}
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<!-- ORDINAL GRAPH -->
+
+<div class="content-card">
+
+    <h2>Ordinal Encoding Graph</h2>
+
+    <img
+        src="{{ url_for(
+            'static',
+            filename='preprocessing_charts/ordinal_encoding.png'
+        ) }}"
+        class="preprocessing-chart"
+        alt="Ordinal Encoding Graph"
+    >
+
+</div>
+
+
+<!-- =====================================================
+     10. STANDARDIZATION
+===================================================== -->
+
+<div class="content-card">
+
+    <h2>10. Standardization</h2>
+
+    <p>
+        Standardization transforms numerical variables so
+        that the transformed data has approximately mean 0
+        and standard deviation 1.
+    </p>
+
+    <div class="formula-box">
+
+        Z = (X − μ) / σ
+
+    </div>
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+                <th>Feature</th>
+                <th>Mean After Scaling</th>
+                <th>Standard Deviation</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for feature, stats in result.standard_stats.items() %}
+
+            <tr>
+
+                <td>
+                    {{ feature }}
+                </td>
+
+                <td>
+                    {{ "%.4f"|format(stats.mean) }}
+                </td>
+
+                <td>
+                    {{ "%.4f"|format(stats.std) }}
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<!-- STANDARDIZATION GRAPH -->
+
+<div class="content-card">
+
+    <h2>Standardization Visualization</h2>
+
+    <img
+        src="{{ url_for(
+            'static',
+            filename='preprocessing_charts/standardization_comparison.png'
+        ) }}"
+        class="preprocessing-chart"
+        alt="Standardization Graph"
+    >
+
+</div>
+
+
+<!-- =====================================================
+     11. MIN MAX
+===================================================== -->
+
+<div class="content-card">
+
+    <h2>11. Min-Max Normalization</h2>
+
+    <p>
+        Min-Max normalization transforms values to a fixed
+        range, normally from 0 to 1.
+    </p>
+
+    <div class="formula-box">
+
+        X' = (X − Xmin) / (Xmax − Xmin)
+
+    </div>
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+                <th>Feature</th>
+                <th>Minimum</th>
+                <th>Maximum</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for feature, stats in result.minmax_stats.items() %}
+
+            <tr>
+
+                <td>
+                    {{ feature }}
+                </td>
+
+                <td>
+                    {{ "%.4f"|format(stats.min) }}
+                </td>
+
+                <td>
+                    {{ "%.4f"|format(stats.max) }}
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<!-- MIN MAX GRAPH -->
+
+<div class="content-card">
+
+    <h2>Min-Max Normalization Visualization</h2>
+
+    <img
+        src="{{ url_for(
+            'static',
+            filename='preprocessing_charts/minmax_normalization.png'
+        ) }}"
+        class="preprocessing-chart"
+        alt="Min Max Normalization Graph"
+    >
+
+</div>
+
+
+<!-- =====================================================
+     12. SCALING COMPARISON
+===================================================== -->
+
+<div class="content-card">
+
+    <h2>12. Standardization vs Min-Max Normalization</h2>
+
+    <p>
+        Both techniques scale numerical features, but they
+        produce different numerical ranges.
+    </p>
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+                <th>Technique</th>
+                <th>Typical Range</th>
+                <th>Main Purpose</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>
+                    <strong>Standardization</strong>
+                </td>
+
+                <td>
+                    Approximately centered around 0
+                </td>
+
+                <td>
+                    Useful when mean and standard deviation
+                    are important.
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <strong>Min-Max</strong>
+                </td>
+
+                <td>
+                    0 to 1
+                </td>
+
+                <td>
+                    Useful when a fixed numerical range is
+                    required.
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <img
+        src="{{ url_for(
+            'static',
+            filename='preprocessing_charts/scaling_comparison.png'
+        ) }}"
+        class="preprocessing-chart"
+        alt="Scaling Comparison"
+    >
+
+</div>
+
+
+<!-- =====================================================
+     13. FEATURE SELECTION
+===================================================== -->
+
+<div class="content-card">
+
+    <h2>13. Feature Selection</h2>
+
+    <p>
+        Feature selection identifies variables that have a
+        stronger relationship with the target PM2.5 variable.
+        The correlation with PM2.5 is used as the selection
+        criterion in this preprocessing stage.
+    </p>
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+                <th>#</th>
+                <th>Selected Feature</th>
+                <th>Correlation</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for feature in result.selected_features %}
+
+            <tr>
+
+                <td>
+                    {{ loop.index }}
+                </td>
+
+                <td>
+                    <strong>{{ feature }}</strong>
+                </td>
+
+                <td>
+                    {{ "%.4f"|format(
+                        result.target_correlation[feature]
+                    ) }}
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    <img
+        src="{{ url_for(
+            'static',
+            filename='preprocessing_charts/feature_selection.png'
+        ) }}"
+        class="preprocessing-chart"
+        alt="Feature Selection Graph"
+    >
+
+</div>
+
+
+<!-- =====================================================
+     14. TRAIN TEST
+===================================================== -->
+
+<div class="content-card">
+
+    <h2>14. Train-Test Split</h2>
+
+    <p>
+        Since air quality is time-dependent, a chronological
+        train-test split is used instead of randomly mixing
+        historical and future observations.
+    </p>
+
+    <table class="data-table">
+
+        <thead>
+
+            <tr>
+                <th>Dataset</th>
+                <th>Rows</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr>
+                <td>
+                    Training Data
+                </td>
+
+                <td>
+                    {{ "{:,}".format(result.train_rows) }}
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    Testing Data
+                </td>
+
+                <td>
+                    {{ "{:,}".format(result.test_rows) }}
+                </td>
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    <div class="info-box">
+
+        <strong>
+            Training:
+        </strong>
+
+        Historical observations before 2017.
+
+        <br><br>
+
+        <strong>
+            Testing:
+        </strong>
+
+        Observations from 2017.
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     15. DATA LEAKAGE
+===================================================== -->
+
+<div class="content-card">
+
+    <h2>15. Data Leakage Prevention</h2>
+
+    <div class="success-box">
+
+        <h3>
+            ✓ Data Leakage Prevention Applied
+        </h3>
+
+        <p>
+            {{ result.leakage_message }}
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     16. EXPORT
+===================================================== -->
+
+<div class="content-card">
+
+    <h2>16. Processed Dataset Export</h2>
+
+    <p>
+        After preprocessing, the datasets are exported as
+        CSV files for use by the machine-learning models.
+    </p>
+
+    <table class="data-table">
+
+        <tr>
+
+            <th>Dataset</th>
+
+            <th>File</th>
+
+        </tr>
+
+        <tr>
+
+            <td>
+                Training Dataset
+            </td>
+
+            <td>
+                {{ result.train_file }}
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>
+                Testing Dataset
+            </td>
+
+            <td>
+                {{ result.test_file }}
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td>
+                Correlation Matrix
+            </td>
+
+            <td>
+                {{ result.correlation_file }}
+            </td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+
+<!-- =====================================================
+     17. FINAL SUMMARY
+===================================================== -->
+
+<div class="content-card">
+
+    <h2>17. Final Preprocessing Summary</h2>
+
+    <div class="success-box">
+
+        <h3>
+            ✓ AeroPure preprocessing completed successfully
+        </h3>
+
+        <p>
+            The raw air-quality dataset was cleaned, missing
+            values were handled, duplicate records were removed,
+            outliers were treated, new time-based features were
+            created, categorical variables were encoded,
+            numerical features were scaled, relevant features
+            were selected, and the data was divided into
+            training and testing datasets.
+        </p>
+
+    </div>
+
+</div>
+
+
+{% endif %}
+
+{% endblock %}

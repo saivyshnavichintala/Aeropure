@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}AeroPure{% endblock %}
+    </title>
+
+    <!-- Main CSS -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+    <aside class="sidebar">
+
+        <!-- Logo -->
+        <div class="logo">
+            <span>✈</span>
+            <span>AeroPure</span>
+        </div>
+
+
+        <!-- Navigation Menu -->
+        <ul class="menu">
+
+            <!-- Home -->
+            <li class="menu-item
+                {% if request.endpoint == 'home' %}active{% endif %}">
+
+                <a href="{{ url_for('home') }}">
+
+                    <span class="menu-icon">🏠</span>
+
+                    <span class="menu-text">
+                        Home
+                    </span>
+
+                </a>
+
+            </li>
+
+
+            <!-- Data -->
+            <li class="menu-item
+                {% if request.endpoint == 'data_page' %}active{% endif %}">
+
+                <a href="{{ url_for('data_page') }}">
+
+                    <span class="menu-icon">📊</span>
+
+                    <span class="menu-text">
+                        Data
+                    </span>
+
+                </a>
+
+            </li>
+
+
+            <!-- EDA -->
+            <li class="menu-item
+                {% if request.endpoint == 'eda_page' %}active{% endif %}">
+
+                <a href="{{ url_for('eda_page') }}">
+
+                    <span class="menu-icon">📈</span>
+
+                    <span class="menu-text">
+                        EDA
+                    </span>
+
+                </a>
+
+            </li>
+
+
+            <!-- Preprocessing -->
+            <li class="menu-item
+                {% if request.endpoint == 'preprocessing_page' %}active{% endif %}">
+
+                <a href="{{ url_for('preprocessing_page') }}">
+
+                    <span class="menu-icon">⚙️</span>
+
+                    <span class="menu-text">
+                        Preprocessing
+                    </span>
+
+                </a>
+
+            </li>
+
+
+            <!-- Linear Regression -->
+            <li class="menu-item
+                {% if request.endpoint == 'linear_regression_page' %}active{% endif %}">
+
+                <a href="{{ url_for('linear_regression_page') }}">
+
+                    <span class="menu-icon">📉</span>
+
+                    <span class="menu-text">
+                        Linear Regression
+                    </span>
+
+                </a>
+
+            </li>
+
+
+            <!-- Logistic Regression -->
+            <li class="menu-item
+                {% if request.endpoint == 'logistic_regression_page' %}active{% endif %}">
+
+                <a href="{{ url_for('logistic_regression_page') }}">
+
+                    <span class="menu-icon">🎯</span>
+
+                    <span class="menu-text">
+                        Logistic Regression
+                    </span>
+
+                </a>
+            <!-- decision_tree -->
+
+            </li>
+            <li class="menu-item
+    {% if request.endpoint == 'decision_tree_page' %}active{% endif %}">
+
+    <a href="{{ url_for('decision_tree_page') }}">
+
+        <span class="menu-icon">🌳</span>
+
+        <span class="menu-text">
+            Decision Tree
+        </span>
+
+    </a>
+
+</li>
+
+        </ul>
+
+    </aside>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+    <main class="main-content">
+
+        {% block content %}
+
+        {% endblock %}
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer>
+
+        <p>
+            © 2026 AeroPure |
+            Air Quality Analysis System
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

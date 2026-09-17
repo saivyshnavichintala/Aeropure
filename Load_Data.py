@@ -1,45 +1,43 @@
-
 import os
 import pandas as pd
 
 
-# =====================================================
-# DATASET PATH
-# =====================================================
+# ============================================================
+# AEROPURE - DATA LOADING
+# ============================================================
 
-DATA_PATH = r"C:\Users\chint\PycharmProjects\Aeropure\Merged_PRSA_Data.csv"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+DATA_PATH = os.path.join(
+    BASE_DIR,
+    "Merged_PRSA_Data.csv"
+)
 
-# =====================================================
-# LOAD DATA
-# =====================================================
 
 def load_data(path: str = DATA_PATH) -> pd.DataFrame:
 
     if not os.path.exists(path):
         raise FileNotFoundError(
-            f"File does not exist: {path}"
+            f"Dataset file does not exist:\n{path}"
         )
 
-    df = pd.read_csv(path)
-
-    # Remove duplicate column names
-    df = df.loc[:, ~df.columns.duplicated()]
+    df = pd.read_csv(
+        path,
+        low_memory=False
+    )
 
     return df
 
-
-# =====================================================
-# DATA SUMMARY
-# =====================================================
 
 def get_data_summary(path: str = DATA_PATH) -> dict:
 
     df = load_data(path)
 
     summary = {
-        "n_rows": df.shape[0],
-        "n_cols": df.shape[1],
+
+        "n_rows": int(df.shape[0]),
+
+        "n_cols": int(df.shape[1]),
 
         "columns": list(df.columns),
 
@@ -55,31 +53,51 @@ def get_data_summary(path: str = DATA_PATH) -> dict:
 
         "preview": df.head(10).to_dict(
             orient="records"
-        ),
+        )
     }
 
     return summary
 
 
-# =====================================================
-# TEST
-# =====================================================
-
 if __name__ == "__main__":
 
-    df = load_data()
+    try:
 
-    print("Dataset loaded successfully!")
+        df = load_data()
 
-    print("Rows:", df.shape[0])
+        print("=" * 70)
+        print("AEROPURE - DATASET LOADING")
+        print("=" * 70)
 
-    print("Columns:", df.shape[1])
+        print("\nDataset Path:")
+        print(DATA_PATH)
 
-    print("\nColumn names:")
+        print("\nDataset Shape:")
+        print(df.shape)
 
-    print(df.columns.tolist())
+        print("\nNumber of Rows:")
+        print(df.shape[0])
 
-    print("\nFirst 10 rows:")
+        print("\nNumber of Columns:")
+        print(df.shape[1])
 
-    print(df.head(10))
+        print("\nColumns:")
+        print(list(df.columns))
 
+        print("\nFirst 10 Rows:")
+        print(df.head(10))
+
+        print("\nMissing Values:")
+        print(df.isna().sum())
+
+        print("\nData Types:")
+        print(df.dtypes)
+
+        print("\n" + "=" * 70)
+        print("DATASET LOADED SUCCESSFULLY")
+        print("=" * 70)
+
+    except Exception as e:
+
+        print("\nERROR:")
+        print(e)

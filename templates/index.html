@@ -1,187 +1,47 @@
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block title %}AeroPure - Home{% endblock %}
 
-<head>
+{% block content %}
 
-    <meta charset="UTF-8">
+<div class="home-page">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <!-- ================= HEADER ================= -->
 
-    <title>AeroPure - Air Quality Analysis</title>
+    <div class="home-header">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+        <div>
+            <h1>Welcome to AeroPure</h1>
 
-</head>
+            <p>
+                Air Quality Analysis and Machine Learning System
+            </p>
+        </div>
 
+        <div class="header-badge">
+            ✈️ Air Quality Analytics
+        </div>
 
-<body>
-
-
-<!-- =====================================================
-     SIDEBAR
-===================================================== -->
-
-<aside class="sidebar">
-
-    <!-- LOGO -->
-
-    <div class="logo">
-        ✈ AeroPure
     </div>
 
 
-    <!-- MENU -->
+    <!-- ================= PROJECT OVERVIEW ================= -->
 
-    <ul class="menu">
+    <div class="overview-card">
 
-
-        <!-- HOME -->
-
-        <li class="menu-item active">
-
-            <a href="{{ url_for('home') }}">
-
-                <span class="menu-icon">
-                    🏠
-                </span>
-
-                <span>
-                    Home
-                </span>
-
-            </a>
-
-        </li>
-
-
-
-        <!-- DATA -->
-
-        <li class="menu-item">
-
-            <a href="{{ url_for('data_page') }}">
-
-                <span class="menu-icon">
-                    📊
-                </span>
-
-                <span>
-                    Data
-                </span>
-
-            </a>
-
-        </li>
-
-
-
-        <!-- EDA -->
-
-        <li class="menu-item">
-
-            <a href="{{ url_for('eda_page') }}">
-
-                <span class="menu-icon">
-                    📈
-                </span>
-
-                <span>
-                    EDA
-                </span>
-
-            </a>
-
-        </li>
-
-
-
-        <!-- PREPROCESSING -->
-
-        <li class="menu-item">
-
-            <a href="{{ url_for('preprocessing_page') }}">
-
-                <span class="menu-icon">
-                    ⚙️
-                </span>
-
-                <span>
-                    Preprocessing
-                </span>
-
-            </a>
-
-        </li>
-
-
-
-        <!-- REGRESSION -->
-
-        <li class="menu-item">
-
-            <a href="{{ url_for('regression_page') }}">
-
-                <span class="menu-icon">
-                    📉
-                </span>
-
-                <span>
-                    Regression
-                </span>
-
-            </a>
-
-        </li>
-
-
-
-        <!-- DECISION TREE & PRUNING -->
-
-        <li class="menu-item">
-
-            <a href="{{ url_for('decision_tree_page') }}">
-
-                <span class="menu-icon">
-                    🌳
-                </span>
-
-                <span>
-                    Decision Tree
-                </span>
-
-            </a>
-
-        </li>
-
-
-    </ul>
-
-</aside>
-
-
-
-<!-- =====================================================
-     MAIN CONTENT
-===================================================== -->
-
-<main class="main-content">
-
-
-    <!-- HEADER -->
-
-    <div class="top-header">
+        <div class="overview-icon">
+            🌍
+        </div>
 
         <div>
 
-            <h1>
-                AeroPure
-            </h1>
+            <h2>Air Quality Analysis System</h2>
 
             <p>
-                Air Quality Analysis System
+                AeroPure analyzes Beijing air-quality data using
+                Exploratory Data Analysis, preprocessing and
+                machine learning techniques to understand and
+                predict PM2.5 air quality.
             </p>
 
         </div>
@@ -189,193 +49,177 @@
     </div>
 
 
+    <!-- ================= FEATURE CARDS ================= -->
 
-    <!-- =================================================
-         WELCOME SECTION
-    ================================================= -->
+    <div class="home-grid">
 
-    <section class="welcome-card">
 
-        <div class="rocket-icon">
-            🌎
+        <!-- DATA -->
+
+        <a href="{{ url_for('data_page') }}"
+           class="home-card">
+
+            <div class="card-icon">
+                📊
+            </div>
+
+            <h2>Data</h2>
+
+            <p>
+                View dataset information, columns,
+                data types, missing values and records.
+            </p>
+
+            <span class="card-link">
+                Explore Data →
+            </span>
+
+        </a>
+
+
+        <!-- EDA -->
+
+        <a href="{{ url_for('eda_page') }}"
+           class="home-card">
+
+            <div class="card-icon">
+                📈
+            </div>
+
+            <h2>EDA</h2>
+
+            <p>
+                Explore distributions, relationships,
+                correlations and air-quality trends.
+            </p>
+
+            <span class="card-link">
+                Explore EDA →
+            </span>
+
+        </a>
+
+
+        <!-- PREPROCESSING -->
+
+        <a href="{{ url_for('preprocessing_page') }}"
+           class="home-card">
+
+            <div class="card-icon">
+                ⚙️
+            </div>
+
+            <h2>Preprocessing</h2>
+
+            <p>
+                Handle missing values, outliers,
+                feature engineering and scaling.
+            </p>
+
+            <span class="card-link">
+                View Preprocessing →
+            </span>
+
+        </a>
+
+
+        <!-- LINEAR REGRESSION -->
+
+        <a href="{{ url_for('linear_regression_page') }}"
+           class="home-card">
+
+            <div class="card-icon">
+                📉
+            </div>
+
+            <h2>Linear Regression</h2>
+
+            <p>
+                Predict PM2.5 concentration using
+                linear and regularized regression models.
+            </p>
+
+            <span class="card-link">
+                View Regression →
+            </span>
+
+        </a>
+
+
+        <!-- LOGISTIC REGRESSION -->
+
+        <a href="{{ url_for('logistic_regression_page') }}"
+           class="home-card">
+
+            <div class="card-icon">
+                🎯
+            </div>
+
+            <h2>Logistic Regression</h2>
+
+            <p>
+                Classify air quality into low and
+                high PM2.5 categories.
+            </p>
+
+            <span class="card-link">
+                View Classification →
+            </span>
+
+        </a>
+
+
+        <!-- DECISION TREE -->
+
+        <a href="{{ url_for('decision_tree_page') }}"
+           class="home-card">
+
+            <div class="card-icon">
+                🌳
+            </div>
+
+            <h2>Decision Tree</h2>
+
+            <p>
+                Explore Decision Trees, Entropy,
+                Information Gain, Gini, CART and
+                boosting algorithms.
+            </p>
+
+            <span class="card-link">
+                View Decision Tree →
+            </span>
+
+        </a>
+
+
+    </div>
+
+
+    <!-- ================= FOOTER INFO ================= -->
+
+    <div class="home-footer-card">
+
+        <div>
+            <strong>Machine Learning Pipeline</strong>
+
+            <span>
+                Data → EDA → Preprocessing → Models → Analysis
+            </span>
         </div>
 
-
-        <h1>
-            Welcome to AeroPure
-        </h1>
-
-
-        <h2>
-            Air Quality Analysis System
-        </h2>
-
-
-        <p>
-
-            Analyze air-quality and weather data
-            collected from multiple monitoring stations.
-
-        </p>
-
-    </section>
-
-
-
-    <!-- =================================================
-         PROJECT WORKFLOW
-    ================================================= -->
-
-    <section class="workflow-section">
-
-        <h2>
-            AeroPure Workflow
-        </h2>
-
-
-        <div class="workflow-grid">
-
-
-            <!-- STEP 01 -->
-
-            <div class="workflow-card">
-
-                <span>
-                    01
-                </span>
-
-                <h3>
-                    Data Collection
-                </h3>
-
-                <p>
-
-                    Collect air-quality and weather
-                    information from multiple monitoring stations.
-
-                </p>
-
-            </div>
-
-
-
-            <!-- STEP 02 -->
-
-            <div class="workflow-card">
-
-                <span>
-                    02
-                </span>
-
-                <h3>
-                    EDA
-                </h3>
-
-                <p>
-
-                    Analyze pollution trends,
-                    distributions, correlations,
-                    missing values and station patterns.
-
-                </p>
-
-            </div>
-
-
-
-            <!-- STEP 03 -->
-
-            <div class="workflow-card">
-
-                <span>
-                    03
-                </span>
-
-                <h3>
-                    Preprocessing
-                </h3>
-
-                <p>
-
-                    Handle missing values, detect outliers,
-                    apply IQR clipping and scale numerical features.
-
-                </p>
-
-            </div>
-
-
-
-            <!-- STEP 04 -->
-
-            <div class="workflow-card">
-
-                <span>
-                    04
-                </span>
-
-                <h3>
-                    Regression Analysis
-                </h3>
-
-                <p>
-
-                    Apply Linear Regression for continuous
-                    prediction and Logistic Regression
-                    for classification analysis.
-
-                </p>
-
-            </div>
-
-
-
-            <!-- STEP 05 -->
-
-            <div class="workflow-card">
-
-                <span>
-                    05
-                </span>
-
-                <h3>
-                    Decision Tree &amp; Pruning
-                </h3>
-
-                <p>
-
-                    Build a Decision Tree and compare its
-                    performance before and after pruning
-                    to analyze overfitting and model improvement.
-
-                </p>
-
-            </div>
-
-
+        <div class="pipeline">
+            <span>Data</span>
+            <b>→</b>
+            <span>EDA</span>
+            <b>→</b>
+            <span>Preprocessing</span>
+            <b>→</b>
+            <span>ML Models</span>
         </div>
 
-    </section>
+    </div>
 
+</div>
 
-
-    <!-- =================================================
-         FOOTER
-    ================================================= -->
-
-    <footer>
-
-        <p>
-            © 2026 AeroPure | Air Quality Analysis System
-        </p>
-
-    </footer>
-
-
-</main>
-
-
-</body>
-
-</html>
-
+{% endblock %}

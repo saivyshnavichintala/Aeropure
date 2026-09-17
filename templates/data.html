@@ -1,131 +1,218 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>AeroPure - Data</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-
-</head>
+{% block title %}
+AeroPure - Data
+{% endblock %}
 
 
-<body>
+{% block content %}
+
+<div class="page-header">
+
+    <h1>
+        Dataset
+    </h1>
+
+    <p>
+        Beijing Multi-Site Air Quality Dataset
+    </p>
+
+</div>
 
 
-<aside class="sidebar">
+{% if error %}
 
-    <div class="logo">
-        ✈ AeroPure
-    </div>
+<div class="error-card">
 
-    <ul class="menu">
+    <h3>
+        Error
+    </h3>
 
-        <li class="menu-item">
-            <a href="{{ url_for('home') }}">
-                🏠 <span>Home</span>
-            </a>
-        </li>
+    <p>
+        {{ error }}
+    </p>
 
-        <li class="menu-item active">
-            <a href="{{ url_for('data_page') }}">
-                📊 <span>Data</span>
-            </a>
-        </li>
+</div>
 
-        <li class="menu-item">
-            <a href="{{ url_for('eda_page') }}">
-                📈 <span>EDA</span>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="{{ url_for('preprocessing_page') }}">
-                ⚙️ <span>Preprocessing</span>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="{{ url_for('regression_page') }}">
-                📉 <span>Regression</span>
-            </a>
-        </li>
-
-        <li class="menu-item">
-            <a href="{{ url_for('decision_tree_page') }}">
-                🌳 <span>Decision Tree</span>
-            </a>
-        </li>
-
-    </ul>
-
-</aside>
+{% endif %}
 
 
-<main class="main-content">
+{% if summary %}
 
-    <div class="page-header">
 
-        <h1>
-            Dataset
-        </h1>
+<div class="stats-container">
+
+
+    <div class="stat-card">
+
+        <h3>
+            Total Rows
+        </h3>
 
         <p>
-            Air-quality and weather data
+            {{ "{:,}".format(summary.n_rows) }}
         </p>
 
     </div>
 
 
-    <div class="info-row">
+    <div class="stat-card">
 
-        <div class="info-box">
+        <h3>
+            Total Columns
+        </h3>
 
-            <h3>Rows</h3>
-
-            <p>
-                {{ rows }}
-            </p>
-
-        </div>
-
-
-        <div class="info-box">
-
-            <h3>Columns</h3>
-
-            <p>
-                {{ columns }}
-            </p>
-
-        </div>
+        <p>
+            {{ summary.n_cols }}
+        </p>
 
     </div>
 
 
-    <section class="content-section">
-
-        <h2>
-            Dataset Preview
-        </h2>
-
-        <div class="table-container">
-
-            {{ table | safe }}
-
-        </div>
-
-    </section>
+</div>
 
 
-</main>
+<div class="content-card">
 
-</body>
+    <h2>
+        Dataset Information
+    </h2>
 
-</html>
+    <p>
+        The dataset contains hourly air quality
+        observations collected from multiple monitoring
+        stations in Beijing.
+    </p>
+
+</div>
+
+
+<div class="content-card">
+
+    <h2>
+        Columns and Data Types
+    </h2>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Column
+                    </th>
+
+                    <th>
+                        Data Type
+                    </th>
+
+                    <th>
+                        Missing Values
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for col in summary.columns %}
+
+                <tr>
+
+                    <td>
+                        {{ col }}
+                    </td>
+
+                    <td>
+                        {{ summary.dtypes[col] }}
+                    </td>
+
+                    <td>
+                        {{ "{:,}".format(summary.missing_counts[col]) }}
+                    </td>
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<div class="content-card">
+
+    <h2>
+        First 10 Records
+    </h2>
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                {% for col in summary.columns %}
+
+                    <th>
+                        {{ col }}
+                    </th>
+
+                {% endfor %}
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for row in summary.preview %}
+
+                <tr>
+
+                {% for col in summary.columns %}
+
+                    <td>
+
+                        {% if row[col] is none %}
+
+                            -
+
+                        {% else %}
+
+                            {{ row[col] }}
+
+                        {% endif %}
+
+                    </td>
+
+                {% endfor %}
+
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+{% endif %}
+
+{% endblock %}
